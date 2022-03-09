@@ -1,0 +1,18 @@
+preferred_devices:
+  - name:
+    sample_rate: 44100
+    channel_map:
+      metronome: [1]
+      guide: [2]
+      multitrack: [1, 2]
+
+sounds:
+  metronome:
+    1/4: ./example/click/1:4.wav
+    1/8: ./example/click/1:8.wav
+    1/16: ./example/click/1:8.wav
+  countdown:
+    count_1: ./example/guide/1.wav
+    count_2: ./example/guide/2.wav
+    count_3: ./example/guide/3.wav
+    count_4: ./example/guide/4.wav
