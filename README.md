@@ -1,5 +1,7 @@
 # Playbacker
 
+<img src="img/tui.png">
+
 TUI application for managing playback on live music performances (metronome, cues and backing tracks).
 
 ## Rational
