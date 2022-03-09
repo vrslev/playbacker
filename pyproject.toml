@@ -25,9 +25,8 @@ pre-commit = "2.17.0"
 pytest = "7.0.1"
 pytest-cov = "3.0.0"
 
-# https://github.com/python-poetry/poetry-core/pull/182#issuecomment-1005195851
 [build-system]
-requires = ["poetry-core@https://github.com/python-poetry/poetry-core/archive/325312c016d69189ac93c945ba0c1b69296c5e54.zip"]
+requires = ["poetry-core>1.0.7"] # 1.0.8 supports PEP 660 — editable installs
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
