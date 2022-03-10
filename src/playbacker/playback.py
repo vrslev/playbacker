@@ -25,7 +25,7 @@ class BasePlayback(Generic[_Tracks], ABC):
 
     def __post_init__(self) -> None:
         self.clock = Clock(callback=self.clock_callback)
-        self.init_tracks()
+        self.tracks = self.get_tracks()
 
     def clock_callback(self) -> None:
         self.shared.position += 1
@@ -34,7 +34,7 @@ class BasePlayback(Generic[_Tracks], ABC):
             track.tick()
 
     @abstractmethod
-    def init_tracks(self) -> None:
+    def get_tracks(self) -> _Tracks:
         ...
 
     def resume(self) -> None:
@@ -88,7 +88,7 @@ class Playback(BasePlayback[DefaultTracks]):
 
     settings: Settings = field(repr=False)
 
-    def init_tracks(self) -> None:
+    def get_tracks(self) -> DefaultTracks:
         def builder(channel_map: list[int]) -> StreamBuilder:
             return lambda g: SounddeviceStream(
                 sound_getter=g,
@@ -100,7 +100,7 @@ class Playback(BasePlayback[DefaultTracks]):
 
         map = self.settings.channel_map
 
-        self.tracks = DefaultTracks(
+        return DefaultTracks(
             metronome=MetronomeTrack(
                 shared=self.shared,
                 sounds=self.settings.sounds.metronome,
