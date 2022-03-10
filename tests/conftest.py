@@ -7,6 +7,7 @@ import pytest
 
 from playbacker.stream import Stream
 from playbacker.tempo import Duration, Tempo, TimeSignature
+from playbacker.track import StreamBuilder
 
 TIME_SIGNATURES: tuple[TimeSignature, ...] = ("4/4", "6/8")
 DURATIONS: tuple[Duration, ...] = ("1/4", "1/8", "1/16")
@@ -45,3 +46,8 @@ class TestingStream(Stream):
 
     def destroy(self) -> None:
         pass
+
+
+@pytest.fixture
+def stream_builder() -> StreamBuilder:
+    return lambda g: TestingStream(sound_getter=g)

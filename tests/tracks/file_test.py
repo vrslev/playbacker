@@ -4,14 +4,14 @@ from unittest.mock import Mock
 
 import pytest
 
-from playbacker.track import Shared, SoundTrack
+from playbacker.track import Shared, SoundTrack, StreamBuilder
 from playbacker.tracks.file import FileSounds, FileTrack
-from tests.conftest import TestingStream, get_audiofile_mock, get_tempo
+from tests.conftest import get_audiofile_mock, get_tempo
 
 
 @pytest.fixture
-def file_track():
-    return FileTrack(shared=Shared(), stream=TestingStream())
+def file_track(stream_builder: StreamBuilder):
+    return FileTrack(shared=Shared(), stream_builder=stream_builder)
 
 
 def test_get_sound_none(file_track: FileTrack):

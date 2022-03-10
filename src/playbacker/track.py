@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Generic, Iterable, Protocol, TypeVar
+from typing import Callable, Generic, Iterable, Protocol, TypeVar
 
 from playbacker.audiofile import AudioArray, AudioFile
-from playbacker.stream import Stream
+from playbacker.stream import SoundGetter, Stream
 from playbacker.tempo import Tempo
 
 
@@ -32,9 +32,6 @@ class Track(Protocol):
         ...
 
 
-_Sounds = TypeVar("_Sounds", bound=Iterable[AudioFile | None])
-
-
 def trim_audio_array(
     data: AudioArray, current_frame: int, required_frames: int
 ) -> AudioArray:
@@ -43,15 +40,20 @@ def trim_audio_array(
     return trimmed
 
 
+_Sounds = TypeVar("_Sounds", bound=Iterable[AudioFile | None])
+StreamBuilder = Callable[[SoundGetter], Stream]
+
+
 @dataclass
 class SoundTrack(Track, Generic[_Sounds], ABC):
-    stream: Stream
+    stream_builder: StreamBuilder
+    stream: Stream = field(init=False)
     current_frame: int = field(default=0, init=False)
     sounds: _Sounds = field(repr=False)
     enabled: bool = field(default=True, init=False)
 
     def __post_init__(self) -> None:
-        self.stream.sound_getter = self.callback
+        self.stream = self.stream_builder(self.callback)
         self.stream.init()
 
     @abstractmethod

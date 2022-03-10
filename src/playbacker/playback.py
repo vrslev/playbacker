@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from functools import partial
 from typing import Generic, NamedTuple, Sequence, TypeVar
 
 from playbacker.audiofile import AudioFile
@@ -8,7 +7,7 @@ from playbacker.clock import Clock
 from playbacker.settings import Settings
 from playbacker.stream import SounddeviceStream
 from playbacker.tempo import Tempo
-from playbacker.track import Shared, Track
+from playbacker.track import Shared, StreamBuilder, Track
 from playbacker.tracks.countdown import CountdownTrack
 from playbacker.tracks.file import FileTrack
 from playbacker.tracks.metronome import MetronomeTrack
@@ -90,30 +89,32 @@ class Playback(BasePlayback[DefaultTracks]):
     settings: Settings = field(repr=False)
 
     def init_tracks(self) -> None:
-        makestream = partial(
-            SounddeviceStream,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
+        def builder(channel_map: list[int]) -> StreamBuilder:
+            return lambda g: SounddeviceStream(
+                sound_getter=g,
+                sample_rate=self.settings.sample_rate,
+                channel_map=channel_map,
+                channel_limit=self.settings.channel_limit,
+                device_name=self.settings.device,
+            )
+
         map = self.settings.channel_map
+
         self.tracks = DefaultTracks(
             metronome=MetronomeTrack(
                 shared=self.shared,
                 sounds=self.settings.sounds.metronome,
-                stream=makestream(channel_map=map.metronome),
+                stream_builder=builder(map.metronome),
             ),
             countdown=CountdownTrack(
                 shared=self.shared,
                 sounds=self.settings.sounds.countdown,
-                stream=makestream(channel_map=map.guide),
+                stream_builder=builder(map.guide),
             ),
             multitrack=FileTrack(
-                shared=self.shared, stream=makestream(channel_map=map.multitrack)
+                shared=self.shared, stream_builder=builder(map.multitrack)
             ),
-            guide=FileTrack(
-                shared=self.shared, stream=makestream(channel_map=map.guide)
-            ),
+            guide=FileTrack(shared=self.shared, stream_builder=builder(map.guide)),
         )
 
     def start(

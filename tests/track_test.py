@@ -4,8 +4,7 @@ from unittest.mock import Mock, PropertyMock
 import numpy
 import pytest
 
-from playbacker.track import Shared, SoundTrack, trim_audio_array
-from tests.conftest import TestingStream
+from playbacker.track import Shared, SoundTrack, StreamBuilder, trim_audio_array
 
 
 @pytest.mark.parametrize(("data_length", "expected_length"), ((512, 256), (220, 200)))
@@ -29,8 +28,8 @@ class SomeTrack(SoundTrack[Any]):
 
 
 @pytest.fixture
-def sound_track():
-    return SomeTrack(shared=Shared(), sounds=[], stream=TestingStream())
+def sound_track(stream_builder: StreamBuilder):
+    return SomeTrack(shared=Shared(), stream_builder=stream_builder, sounds=[])
 
 
 def test_stream_initialised(sound_track: SoundTrack[Any]):

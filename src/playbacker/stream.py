@@ -7,10 +7,12 @@ import sounddevice
 
 from playbacker.audiofile import AudioArray
 
+SoundGetter = Callable[[int], AudioArray | None]
+
 
 @dataclass
 class Stream(Protocol):
-    sound_getter: Callable[[int], AudioArray | None] = field(init=False, repr=False)
+    sound_getter: SoundGetter = field(repr=False)
     # Whether stream is already created in thread
     ready: Event = field(default_factory=Event, init=False, repr=False)
     sample_rate: int = field(repr=False)

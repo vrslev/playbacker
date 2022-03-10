@@ -56,7 +56,11 @@ def test_allocate_data_to_channels(map: list[int], limit: int):
 @pytest.fixture
 def stream():
     return SounddeviceStream(
-        sample_rate=48000, channel_map=[1, 2], channel_limit=2, device_name=None
+        sound_getter=lambda _: None,
+        sample_rate=48000,
+        channel_map=[1, 2],
+        channel_limit=2,
+        device_name=None,
     )
 
 
@@ -90,6 +94,7 @@ def call_callback_in_mock_stream(
     channel_limit: int,
 ) -> AudioArray:
     stream = SounddeviceStream(
+        sound_getter=lambda _: None,
         sample_rate=0,
         channel_map=channel_map,
         channel_limit=channel_limit,
