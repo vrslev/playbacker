@@ -41,7 +41,7 @@ def get_audiofile_mock():
 class TestingStream(Stream):
     sample_rate: int = 0
 
-    def init(self) -> None:
+    def __post_init__(self) -> None:
         self.ready.set()
 
     def destroy(self) -> None:

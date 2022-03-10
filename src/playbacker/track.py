@@ -54,7 +54,6 @@ class SoundTrack(Track, Generic[_Sounds], ABC):
 
     def __post_init__(self) -> None:
         self.stream = self.stream_builder(self.callback)
-        self.stream.init()
 
     @abstractmethod
     def get_sound(self) -> AudioArray | None:

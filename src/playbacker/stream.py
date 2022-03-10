@@ -17,9 +17,6 @@ class Stream(Protocol):
     ready: Event = field(default_factory=Event, init=False, repr=False)
     sample_rate: int = field(repr=False)
 
-    def init(self) -> None:  # pragma: no cover
-        ...
-
     def destroy(self) -> None:  # pragma: no cover
         ...
 
@@ -84,7 +81,7 @@ class SounddeviceStream(Stream):
         self.stream.start()
         self.ready.set()
 
-    def init(self) -> None:
+    def __post_init__(self) -> None:
         Thread(target=self._init_stream, daemon=True).start()
 
     def _destroy_stream(self) -> None:

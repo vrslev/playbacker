@@ -53,9 +53,14 @@ def test_allocate_data_to_channels(map: list[int], limit: int):
         count += 1
 
 
+class StreamWithoutPostinit(SounddeviceStream):
+    def __post_init__(self) -> None:
+        pass
+
+
 @pytest.fixture
 def stream():
-    return SounddeviceStream(
+    return StreamWithoutPostinit(
         sound_getter=lambda _: None,
         sample_rate=48000,
         channel_map=[1, 2],
@@ -69,7 +74,7 @@ def test_stream_init(monkeypatch: pytest.MonkeyPatch, stream: SounddeviceStream)
     monkeypatch.setattr(sounddevice, "CoreAudioSettings", Mock())
     monkeypatch.setattr(sounddevice, "OutputStream", mock)
 
-    stream.init()
+    SounddeviceStream.__post_init__(stream)
     stream.ready.wait(1)
 
     assert stream.ready.is_set()
@@ -93,7 +98,7 @@ def call_callback_in_mock_stream(
     channel_map: list[int],
     channel_limit: int,
 ) -> AudioArray:
-    stream = SounddeviceStream(
+    stream = StreamWithoutPostinit(
         sound_getter=lambda _: None,
         sample_rate=0,
         channel_map=channel_map,
