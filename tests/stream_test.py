@@ -8,7 +8,7 @@ import sounddevice
 
 from playbacker.audiofile import AudioArray
 from playbacker.stream import (
-    Stream,
+    SounddeviceStream,
     allocate_data_to_channels,
     convert_channel_map_to_coreaudio_format,
 )
@@ -55,16 +55,12 @@ def test_allocate_data_to_channels(map: list[int], limit: int):
 
 @pytest.fixture
 def stream():
-    return Stream(
-        sound_getter=lambda _: None,
-        sample_rate=48000,
-        channel_map=[1, 2],
-        channel_limit=2,
-        device_name=None,
+    return SounddeviceStream(
+        sample_rate=48000, channel_map=[1, 2], channel_limit=2, device_name=None
     )
 
 
-def test_stream_init(monkeypatch: pytest.MonkeyPatch, stream: Stream):
+def test_stream_init(monkeypatch: pytest.MonkeyPatch, stream: SounddeviceStream):
     mock = Mock()
     monkeypatch.setattr(sounddevice, "CoreAudioSettings", Mock())
     monkeypatch.setattr(sounddevice, "OutputStream", mock)
@@ -77,7 +73,7 @@ def test_stream_init(monkeypatch: pytest.MonkeyPatch, stream: Stream):
     cast(Mock, stream.stream.start).assert_called_once_with()
 
 
-def test_stream_destroy(monkeypatch: pytest.MonkeyPatch, stream: Stream):
+def test_stream_destroy(monkeypatch: pytest.MonkeyPatch, stream: SounddeviceStream):
     mock = Mock()
     stream.stream = mock
 
@@ -93,13 +89,14 @@ def call_callback_in_mock_stream(
     channel_map: list[int],
     channel_limit: int,
 ) -> AudioArray:
-    stream = Stream(
-        sound_getter=get_sound,
+    stream = SounddeviceStream(
         sample_rate=0,
         channel_map=channel_map,
         channel_limit=channel_limit,
         device_name=None,
     )
+    stream.sound_getter = get_sound
+
     outdata = numpy.ndarray((1, channel_limit))
     outdata.fill(0)
 

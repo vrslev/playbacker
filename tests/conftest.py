@@ -1,11 +1,12 @@
 import random
-from typing import Any, Callable
+from dataclasses import dataclass
+from typing import Any
 from unittest.mock import Mock, PropertyMock
 
 import pytest
 
+from playbacker.stream import Stream
 from playbacker.tempo import Duration, Tempo, TimeSignature
-from playbacker.track import SoundTrack
 
 TIME_SIGNATURES: tuple[TimeSignature, ...] = ("4/4", "6/8")
 DURATIONS: tuple[Duration, ...] = ("1/4", "1/8", "1/16")
@@ -28,14 +29,19 @@ def tempo():
     return generate_tempo()
 
 
-@pytest.fixture
-def no_stream_init_in_soundtrack(monkeypatch: pytest.MonkeyPatch):
-    func: Callable[..., None] = lambda self: None
-    monkeypatch.setattr(SoundTrack, "__post_init__", func)
-
-
 def get_audiofile_mock():
     mock = Mock()
     prop_mock = PropertyMock()
     type(mock).data = prop_mock
     return mock, prop_mock
+
+
+@dataclass
+class TestingStream(Stream):
+    sample_rate: int = 0
+
+    def init(self) -> None:
+        self.ready.set()
+
+    def destroy(self) -> None:
+        pass

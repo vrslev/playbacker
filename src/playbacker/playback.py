@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from functools import partial
 from typing import Generic, NamedTuple, Sequence, TypeVar
 
 from playbacker.audiofile import AudioFile
 from playbacker.clock import Clock
 from playbacker.settings import Settings
+from playbacker.stream import SounddeviceStream
 from playbacker.tempo import Tempo
 from playbacker.track import Shared, Track
 from playbacker.tracks.countdown import CountdownTrack
@@ -88,38 +90,30 @@ class Playback(BasePlayback[DefaultTracks]):
     settings: Settings = field(repr=False)
 
     def init_tracks(self) -> None:
-        metronome = MetronomeTrack(
-            shared=self.shared,
-            sounds=self.settings.sounds.metronome,
-            channel_map=self.settings.channel_map.metronome,
+        makestream = partial(
+            SounddeviceStream,
             sample_rate=self.settings.sample_rate,
             channel_limit=self.settings.channel_limit,
             device_name=self.settings.device,
         )
-        countdown = CountdownTrack(
-            shared=self.shared,
-            sounds=self.settings.sounds.countdown,
-            channel_map=self.settings.channel_map.guide,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
-        multitrack = FileTrack(
-            shared=self.shared,
-            channel_map=self.settings.channel_map.multitrack,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
-        guide = FileTrack(
-            shared=self.shared,
-            channel_map=self.settings.channel_map.guide,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
+        map = self.settings.channel_map
         self.tracks = DefaultTracks(
-            metronome=metronome, countdown=countdown, multitrack=multitrack, guide=guide
+            metronome=MetronomeTrack(
+                shared=self.shared,
+                sounds=self.settings.sounds.metronome,
+                stream=makestream(channel_map=map.metronome),
+            ),
+            countdown=CountdownTrack(
+                shared=self.shared,
+                sounds=self.settings.sounds.countdown,
+                stream=makestream(channel_map=map.guide),
+            ),
+            multitrack=FileTrack(
+                shared=self.shared, stream=makestream(channel_map=map.multitrack)
+            ),
+            guide=FileTrack(
+                shared=self.shared, stream=makestream(channel_map=map.guide)
+            ),
         )
 
     def start(

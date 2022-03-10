@@ -45,25 +45,13 @@ def trim_audio_array(
 
 @dataclass
 class SoundTrack(Track, Generic[_Sounds], ABC):
+    stream: Stream
     current_frame: int = field(default=0, init=False)
-
     sounds: _Sounds = field(repr=False)
     enabled: bool = field(default=True, init=False)
 
-    stream: Stream = field(init=False)
-    channel_map: list[int] = field(repr=False)
-    sample_rate: int = field(repr=False)
-    channel_limit: int = field(repr=False)
-    device_name: str | None = field(repr=False)
-
     def __post_init__(self) -> None:
-        self.stream = Stream(
-            sound_getter=self.callback,
-            sample_rate=self.sample_rate,
-            channel_map=self.channel_map,
-            channel_limit=self.channel_limit,
-            device_name=self.device_name,
-        )
+        self.stream.sound_getter = self.callback
         self.stream.init()
 
     @abstractmethod
