@@ -6,7 +6,7 @@ from textual.app import App
 from textual.binding import Binding
 from textual.driver import Driver
 from textual.reactive import Reactive
-from textual.views import DockView
+from textual.views._dock_view import DockView
 from textual.widgets import ScrollView
 from textual_inputs import TextInput
 from textual_inputs.events import InputOnChange
