@@ -46,7 +46,7 @@ StreamBuilder = Callable[[SoundGetter], Stream]
 @dataclass
 class SoundTrack(Track, Generic[_Sounds], Protocol):
     paused: bool = field(default=False, init=False)
-    stream_builder: StreamBuilder
+    stream_builder: StreamBuilder = field()
     stream: Stream = field(init=False)
     current_frame: int = field(default=0, init=False)
     sounds: _Sounds = field(repr=False)
@@ -55,7 +55,7 @@ class SoundTrack(Track, Generic[_Sounds], Protocol):
     def __post_init__(self) -> None:
         self.stream = self.stream_builder(self.callback)
 
-    def get_sound(self) -> AudioArray | None:
+    def get_sound(self) -> AudioArray | None:  # pragma: no cover
         ...
 
     def _should_be_silent(self) -> bool:

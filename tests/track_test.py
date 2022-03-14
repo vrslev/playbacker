@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Any, cast
 from unittest.mock import Mock, PropertyMock
 
@@ -22,6 +23,7 @@ def test_trim_audio_array(data_length: int, expected_length: int):
         assert all(val == 0 for val in chunk)
 
 
+@dataclass
 class SomeTrack(SoundTrack[Any]):
     def get_sound(self):
         pass
