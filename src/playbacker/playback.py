@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Generic, NamedTuple, Sequence, TypeVar
+from typing import Generic, NamedTuple, Protocol, Sequence, TypeVar
 
 from playbacker.audiofile import AudioFile
 from playbacker.clock import Clock
@@ -16,7 +15,7 @@ _Tracks = TypeVar("_Tracks", bound=Sequence[Track])
 
 
 @dataclass
-class BasePlayback(Generic[_Tracks], ABC):
+class BasePlayback(Generic[_Tracks], Protocol):
     """Playback that manages clock and tracks."""
 
     clock: Clock = field(init=False)
@@ -33,7 +32,6 @@ class BasePlayback(Generic[_Tracks], ABC):
         for track in self.tracks:
             track.tick()
 
-    @abstractmethod
     def get_tracks(self) -> _Tracks:
         ...
 
@@ -65,7 +63,6 @@ class BasePlayback(Generic[_Tracks], ABC):
         self.shared.position = 0
         self.shared.tempo = tempo
 
-    @abstractmethod
     def start(self, *args: ..., **kwargs: ...) -> None:
         ...
 

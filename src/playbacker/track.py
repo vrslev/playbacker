@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Callable, Generic, Iterable, Protocol, TypeVar
 
@@ -45,7 +44,8 @@ StreamBuilder = Callable[[SoundGetter], Stream]
 
 
 @dataclass
-class SoundTrack(Track, Generic[_Sounds], ABC):
+class SoundTrack(Track, Generic[_Sounds], Protocol):
+    paused: bool = field(default=False, init=False)
     stream_builder: StreamBuilder
     stream: Stream = field(init=False)
     current_frame: int = field(default=0, init=False)
@@ -55,7 +55,6 @@ class SoundTrack(Track, Generic[_Sounds], ABC):
     def __post_init__(self) -> None:
         self.stream = self.stream_builder(self.callback)
 
-    @abstractmethod
     def get_sound(self) -> AudioArray | None:
         ...
 
