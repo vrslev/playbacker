@@ -1,11 +1,24 @@
 import time
 from dataclasses import dataclass, field
 from threading import Event, Thread
-from typing import Any, Callable
+from typing import Any, Callable, Protocol
 
 import sounddevice
 
 from playbacker.audiofile import AudioArray
+
+SoundGetter = Callable[[int], AudioArray | None]
+
+
+@dataclass
+class Stream(Protocol):
+    sound_getter: SoundGetter = field(repr=False)
+    # Whether stream is already created in thread
+    ready: Event = field(default_factory=Event, init=False, repr=False)
+    sample_rate: int = field(repr=False)
+
+    def destroy(self) -> None:  # pragma: no cover
+        ...
 
 
 def convert_channel_map_to_coreaudio_format(
@@ -46,17 +59,13 @@ def allocate_data_to_channels(
 
 
 @dataclass
-class Stream:
+class SounddeviceStream(Stream):
     """Wrapper around sounddevice.OutputStream"""
 
-    sound_getter: Callable[[int], AudioArray | None] = field(repr=False)
-    sample_rate: int = field(repr=False)
     channel_map: list[int]
     channel_limit: int = field(repr=False)
     device_name: str | None = field(repr=False)
     stream: sounddevice.OutputStream = field(init=False, repr=False)
-    # Whether stream is already created in thread
-    ready: Event = field(default_factory=Event, init=False, repr=False)
 
     def _init_stream(self) -> None:
         map = convert_channel_map_to_coreaudio_format(
@@ -72,7 +81,7 @@ class Stream:
         self.stream.start()
         self.ready.set()
 
-    def init(self) -> None:
+    def __post_init__(self) -> None:
         Thread(target=self._init_stream, daemon=True).start()
 
     def _destroy_stream(self) -> None:

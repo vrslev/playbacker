@@ -5,24 +5,21 @@ import pytest
 
 from playbacker.audiofile import AudioFile
 from playbacker.tempo import Duration, Tempo, TimeSignature
-from playbacker.track import Shared
+from playbacker.track import Shared, StreamBuilder
 from playbacker.tracks.metronome import MetronomeSounds, MetronomeTrack, get_instruction
 from tests.conftest import DURATIONS, TIME_SIGNATURES, get_audiofile_mock
 
 
 @pytest.fixture
-def metronome_track(no_stream_init_in_soundtrack: None):
+def metronome_track(stream_builder: StreamBuilder):
     return MetronomeTrack(
         shared=Shared(),
+        stream_builder=stream_builder,
         sounds=MetronomeSounds(
             tick_1_4=AudioFile(path=Path("tick_1_4"), sample_rate=44100),
             tick_1_8=AudioFile(path=Path("tick_1_8"), sample_rate=44100),
             tick_1_16=AudioFile(path=Path("tick_1_16"), sample_rate=44100),
         ),
-        channel_limit=0,
-        device_name=None,
-        channel_map=[],
-        sample_rate=44100,
     )
 
 

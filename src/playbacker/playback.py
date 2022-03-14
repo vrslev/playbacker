@@ -1,12 +1,12 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Generic, NamedTuple, Sequence, TypeVar
+from typing import Generic, NamedTuple, Protocol, Sequence, TypeVar
 
 from playbacker.audiofile import AudioFile
 from playbacker.clock import Clock
 from playbacker.settings import Settings
+from playbacker.stream import SounddeviceStream
 from playbacker.tempo import Tempo
-from playbacker.track import Shared, Track
+from playbacker.track import Shared, StreamBuilder, Track
 from playbacker.tracks.countdown import CountdownTrack
 from playbacker.tracks.file import FileTrack
 from playbacker.tracks.metronome import MetronomeTrack
@@ -15,7 +15,7 @@ _Tracks = TypeVar("_Tracks", bound=Sequence[Track])
 
 
 @dataclass
-class BasePlayback(Generic[_Tracks], ABC):
+class BasePlayback(Generic[_Tracks], Protocol):
     """Playback that manages clock and tracks."""
 
     clock: Clock = field(init=False)
@@ -24,7 +24,7 @@ class BasePlayback(Generic[_Tracks], ABC):
 
     def __post_init__(self) -> None:
         self.clock = Clock(callback=self.clock_callback)
-        self.init_tracks()
+        self.tracks = self.get_tracks()
 
     def clock_callback(self) -> None:
         self.shared.position += 1
@@ -32,8 +32,7 @@ class BasePlayback(Generic[_Tracks], ABC):
         for track in self.tracks:
             track.tick()
 
-    @abstractmethod
-    def init_tracks(self) -> None:
+    def get_tracks(self) -> _Tracks:
         ...
 
     def resume(self) -> None:
@@ -64,7 +63,6 @@ class BasePlayback(Generic[_Tracks], ABC):
         self.shared.position = 0
         self.shared.tempo = tempo
 
-    @abstractmethod
     def start(self, *args: ..., **kwargs: ...) -> None:
         ...
 
@@ -87,39 +85,33 @@ class Playback(BasePlayback[DefaultTracks]):
 
     settings: Settings = field(repr=False)
 
-    def init_tracks(self) -> None:
-        metronome = MetronomeTrack(
-            shared=self.shared,
-            sounds=self.settings.sounds.metronome,
-            channel_map=self.settings.channel_map.metronome,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
-        countdown = CountdownTrack(
-            shared=self.shared,
-            sounds=self.settings.sounds.countdown,
-            channel_map=self.settings.channel_map.guide,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
-        multitrack = FileTrack(
-            shared=self.shared,
-            channel_map=self.settings.channel_map.multitrack,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
-        guide = FileTrack(
-            shared=self.shared,
-            channel_map=self.settings.channel_map.guide,
-            sample_rate=self.settings.sample_rate,
-            channel_limit=self.settings.channel_limit,
-            device_name=self.settings.device,
-        )
-        self.tracks = DefaultTracks(
-            metronome=metronome, countdown=countdown, multitrack=multitrack, guide=guide
+    def get_tracks(self) -> DefaultTracks:
+        def builder(channel_map: list[int]) -> StreamBuilder:
+            return lambda g: SounddeviceStream(
+                sound_getter=g,
+                sample_rate=self.settings.sample_rate,
+                channel_map=channel_map,
+                channel_limit=self.settings.channel_limit,
+                device_name=self.settings.device,
+            )
+
+        map = self.settings.channel_map
+
+        return DefaultTracks(
+            metronome=MetronomeTrack(
+                shared=self.shared,
+                sounds=self.settings.sounds.metronome,
+                stream_builder=builder(map.metronome),
+            ),
+            countdown=CountdownTrack(
+                shared=self.shared,
+                sounds=self.settings.sounds.countdown,
+                stream_builder=builder(map.guide),
+            ),
+            multitrack=FileTrack(
+                shared=self.shared, stream_builder=builder(map.multitrack)
+            ),
+            guide=FileTrack(shared=self.shared, stream_builder=builder(map.guide)),
         )
 
     def start(

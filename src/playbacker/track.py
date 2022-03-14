@@ -1,9 +1,8 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Generic, Iterable, Protocol, TypeVar
+from typing import Callable, Generic, Iterable, Protocol, TypeVar
 
 from playbacker.audiofile import AudioArray, AudioFile
-from playbacker.stream import Stream
+from playbacker.stream import SoundGetter, Stream
 from playbacker.tempo import Tempo
 
 
@@ -32,9 +31,6 @@ class Track(Protocol):
         ...
 
 
-_Sounds = TypeVar("_Sounds", bound=Iterable[AudioFile | None])
-
-
 def trim_audio_array(
     data: AudioArray, current_frame: int, required_frames: int
 ) -> AudioArray:
@@ -43,31 +39,23 @@ def trim_audio_array(
     return trimmed
 
 
-@dataclass
-class SoundTrack(Track, Generic[_Sounds], ABC):
-    current_frame: int = field(default=0, init=False)
+_Sounds = TypeVar("_Sounds", bound=Iterable[AudioFile | None])
+StreamBuilder = Callable[[SoundGetter], Stream]
 
+
+@dataclass
+class SoundTrack(Track, Generic[_Sounds], Protocol):
+    paused: bool = field(default=False, init=False)
+    stream_builder: StreamBuilder = field()
+    stream: Stream = field(init=False)
+    current_frame: int = field(default=0, init=False)
     sounds: _Sounds = field(repr=False)
     enabled: bool = field(default=True, init=False)
 
-    stream: Stream = field(init=False)
-    channel_map: list[int] = field(repr=False)
-    sample_rate: int = field(repr=False)
-    channel_limit: int = field(repr=False)
-    device_name: str | None = field(repr=False)
-
     def __post_init__(self) -> None:
-        self.stream = Stream(
-            sound_getter=self.callback,
-            sample_rate=self.sample_rate,
-            channel_map=self.channel_map,
-            channel_limit=self.channel_limit,
-            device_name=self.device_name,
-        )
-        self.stream.init()
+        self.stream = self.stream_builder(self.callback)
 
-    @abstractmethod
-    def get_sound(self) -> AudioArray | None:
+    def get_sound(self) -> AudioArray | None:  # pragma: no cover
         ...
 
     def _should_be_silent(self) -> bool:

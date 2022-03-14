@@ -1,7 +1,7 @@
 import pytest
 
 from playbacker.tempo import TimeSignature
-from playbacker.track import Shared
+from playbacker.track import Shared, StreamBuilder
 from playbacker.tracks.countdown import (
     CountdownSounds,
     CountdownTrack,
@@ -12,20 +12,18 @@ from tests.conftest import TIME_SIGNATURES, get_audiofile_mock, get_tempo
 
 @pytest.mark.parametrize("position", range(35))
 @pytest.mark.parametrize("time_signature", TIME_SIGNATURES)
-@pytest.mark.usefixtures("no_stream_init_in_soundtrack")
-def test_get_sound(position: int, time_signature: TimeSignature):
+def test_get_sound(
+    stream_builder: StreamBuilder, position: int, time_signature: TimeSignature
+):
     track = CountdownTrack(
         shared=Shared(position=position),
+        stream_builder=stream_builder,
         sounds=CountdownSounds(
             count_1=get_audiofile_mock()[0],
             count_2=get_audiofile_mock()[0],
             count_3=get_audiofile_mock()[0],
             count_4=get_audiofile_mock()[0],
         ),
-        channel_map=[],
-        channel_limit=0,
-        sample_rate=0,
-        device_name=None,
     )
 
     track.shared.tempo = get_tempo(sig=time_signature)

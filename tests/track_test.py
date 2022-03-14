@@ -1,11 +1,11 @@
+from dataclasses import dataclass
 from typing import Any, cast
 from unittest.mock import Mock, PropertyMock
 
 import numpy
 import pytest
-import sounddevice
 
-from playbacker.track import Shared, SoundTrack, trim_audio_array
+from playbacker.track import Shared, SoundTrack, StreamBuilder, trim_audio_array
 
 
 @pytest.mark.parametrize(("data_length", "expected_length"), ((512, 256), (220, 200)))
@@ -23,39 +23,20 @@ def test_trim_audio_array(data_length: int, expected_length: int):
         assert all(val == 0 for val in chunk)
 
 
+@dataclass
 class SomeTrack(SoundTrack[Any]):
     def get_sound(self):
         pass
 
 
-def test_stream_initialised(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr(sounddevice, "OutputStream", Mock())
-
-    track = SomeTrack(
-        shared=Shared(),
-        sounds=[],
-        channel_map=[1, 2],
-        sample_rate=48000,
-        channel_limit=3,
-        device_name="mydevice",
-    )
-
-    assert track.stream.channel_map == [1, 2]
-    assert track.stream.sample_rate == 48000
-    assert track.stream.channel_limit == 3
-    assert track.stream.device_name == "mydevice"
-
-
 @pytest.fixture
-def sound_track(no_stream_init_in_soundtrack: None):
-    return SomeTrack(
-        shared=Shared(),
-        sounds=[],
-        channel_map=[],
-        sample_rate=0,
-        channel_limit=0,
-        device_name=None,
-    )
+def sound_track(stream_builder: StreamBuilder):
+    return SomeTrack(shared=Shared(), stream_builder=stream_builder, sounds=[])
+
+
+def test_stream_initialised(sound_track: SoundTrack[Any]):
+    assert sound_track.stream.ready.is_set()
+    assert sound_track.stream.sound_getter == sound_track.callback
 
 
 @pytest.mark.parametrize("disabled", (True, False))
