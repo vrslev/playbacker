@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "playbacker"
-version = "0.1.0"
+version = "0"
 description = "Live music performance playback"
 authors = ["Lev Vereshchagin <mail@vrslev.com>"]
 license = "MIT"
@@ -31,6 +31,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 playbacker = "playbacker.main:main"
+
+[tool.poetry-version-plugin]
+source = "git-tag"
 
 [tool.pyright]
 ignore = [".venv"]
