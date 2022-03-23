@@ -21,13 +21,13 @@ Make my own app! 😃
 ## Installation
 
 ```sh
-pip install git+https://github.com/vrslev/playbacker
+pip install playbacker
 ```
 
 Or better of with pipx:
 
 ```sh
-pipx install git+https://github.com/vrslev/playbacker
+pipx install playbacker
 ```
 
 ## Usage
