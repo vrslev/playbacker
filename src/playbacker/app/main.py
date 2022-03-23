@@ -193,7 +193,11 @@ class PlaybackerApp(App):
             return
 
         with suppress(ValidationError):
-            return Tempo(bpm=parts[0], time_signature=parts[1], duration=parts[2])  # type: ignore
+            return Tempo(
+                bpm=parts[0],  # pyright: ignore[reportGeneralTypeIssues]
+                time_signature=parts[1],  # pyright: ignore[reportGeneralTypeIssues]
+                duration=parts[2],  # pyright: ignore[reportGeneralTypeIssues]
+            )
 
     async def action_submit(self):
         tempo = self._get_custom_tempo()

@@ -12,12 +12,20 @@ AudioArray = numpy.ndarray[Any, numpy.dtype[Any]]
 
 def read_file(path: Path, sample_rate: int) -> AudioArray:
     """Read audio file and convert to required sample rate."""
-    data, in_rate = cast(tuple[AudioArray, int], soundfile.read(path))  # type: ignore
+    data, in_rate = cast(
+        tuple[AudioArray, int],
+        soundfile.read(path),  # pyright: ignore[reportUnknownMemberType]
+    )
 
     if in_rate == sample_rate:
         return data
 
-    return cast(AudioArray, soxr.resample(data, in_rate, sample_rate))  # type: ignore
+    return cast(
+        AudioArray,
+        soxr.resample(  # pyright: ignore[reportUnknownMemberType]
+            data, in_rate, sample_rate
+        ),
+    )
 
 
 @dataclass

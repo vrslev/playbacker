@@ -66,7 +66,12 @@ def _get_available_device(devices: list[_Device]) -> tuple[_Device, _DeviceProps
 
     for dev in devices:
         try:
-            return dev, sounddevice.query_devices(device=dev.name, kind="output")  # type: ignore
+            return (
+                dev,
+                sounddevice.query_devices(  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+                    device=dev.name, kind="output"
+                ),
+            )
         except ValueError as e:
             exc = e
             continue

@@ -90,7 +90,11 @@ class SongList(TreeControl[Song]):
     selected_node: TreeNode[Song] | None
 
     def __init__(self, setlist: Setlist) -> None:
-        super().__init__(setlist.name, data=setlist, name=None)  # type: ignore
+        super().__init__(
+            setlist.name,
+            data=setlist,  # pyright: ignore[reportGeneralTypeIssues]
+            name=None,
+        )
         self._tree.hide_root = True
 
     async def on_mount(self) -> None:
