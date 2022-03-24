@@ -1,5 +1,6 @@
+from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Generic, NamedTuple, Protocol, Sequence, TypeVar
+from typing import Generic, Iterator, NamedTuple, Protocol, Sequence, TypeVar
 
 from playbacker.audiofile import AudioFile
 from playbacker.clock import Clock
@@ -58,15 +59,15 @@ class BasePlayback(Generic[_Tracks], Protocol):
         for track in self.tracks:
             track.destroy()
 
-    def pre_start(self, tempo: Tempo) -> None:
-        self.shared.configuring = True
-        self.shared.position = 0
-        self.shared.tempo = tempo
-
     def start(self, *args: ..., **kwargs: ...) -> None:
         ...
 
-    def post_start(self, tempo: Tempo) -> None:
+    @contextmanager
+    def starting_ctx(self, tempo: Tempo) -> Iterator[None]:
+        self.shared.configuring = True
+        self.shared.position = 0
+        self.shared.tempo = tempo
+        yield
         self.shared.configuring = False
         self.clock.lag = tempo.lag
         self.clock.start()
@@ -120,14 +121,11 @@ class Playback(BasePlayback[DefaultTracks]):
         multitrack: AudioFile | None = None,
         guide: AudioFile | None = None,
     ) -> None:
-        self.pre_start(tempo)
+        with self.starting_ctx(tempo):
+            self.tracks.metronome.start()
+            self.tracks.countdown.start()
+            self.tracks.multitrack.start(file=multitrack)
+            self.tracks.guide.start(file=guide)
 
-        self.tracks.metronome.start()
-        self.tracks.countdown.start()
-        self.tracks.multitrack.start(file=multitrack)
-        self.tracks.guide.start(file=guide)
-
-        if guide:
-            self.tracks.countdown.enabled = False
-
-        self.post_start(tempo)
+            if guide:
+                self.tracks.countdown.enabled = False
