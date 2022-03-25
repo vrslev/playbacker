@@ -1,3 +1,4 @@
+import os.path
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -61,6 +62,7 @@ def prompt_list(message: str, name_to_value: dict[str, _T]) -> _T:
 
 def prompt_for_setlist() -> Path:
     files = get_paths().setlists_dir.glob("*.yaml")
+    files = sorted(files, key=os.path.getmtime, reverse=True)
     map = get_setlist_name_to_path_map(files)
     return prompt_list("Select a setlist", map)
 
