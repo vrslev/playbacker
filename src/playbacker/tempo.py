@@ -11,7 +11,7 @@ class Tempo(BaseModel, frozen=True):
     time_signature: TimeSignature
     duration: Duration
 
-    @property
+    @property  # TODO: Cached
     def lag(self) -> float:
         return 60 / self.bpm / 4
 
