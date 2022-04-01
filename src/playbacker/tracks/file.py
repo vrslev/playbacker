@@ -23,7 +23,7 @@ class FileTrack(SoundTrack[FileSounds]):
 
         # If something throttled, we should correct it.
         if (  # TODO: Test
-            result
+            result is not None
             and self.last_sync_position != self.shared.position
             and self.shared.tempo.get_start_of_bar(self.shared.position)
             == self.shared.position
