@@ -12,6 +12,7 @@ class FileSounds(NamedTuple):
 @dataclass
 class FileTrack(SoundTrack[FileSounds]):
     sounds: FileSounds = field(init=False)
+    last_sync_position: int = 0
 
     def get_sound(self) -> AudioArray | None:
         if self.sounds.file:
@@ -19,6 +20,19 @@ class FileTrack(SoundTrack[FileSounds]):
 
     def callback(self, frames: int) -> AudioArray | None:
         result = super().callback(frames=frames)
+
+        # If something throttled, we should correct it.
+        if (  # TODO: Test
+            result is not None
+            and self.last_sync_position != self.shared.position
+            and self.shared.tempo.get_start_of_bar(self.shared.position)
+            == self.shared.position
+        ):
+            self.last_sync_position = self.shared.position
+            new_frame = self.get_new_frame()
+
+            if new_frame - self.current_frame > 1000:
+                self.current_frame = new_frame
 
         if not self.enabled and not result:
             self.current_frame += frames
