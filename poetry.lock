@@ -383,11 +383,11 @@ python-versions = "*"
 
 [[package]]
 name = "rich"
-version = "12.0.1"
+version = "12.3.0"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 category = "main"
 optional = false
-python-versions = ">=3.6.2,<4.0.0"
+python-versions = ">=3.6.3,<4.0.0"
 
 [package.dependencies]
 commonmark = ">=0.9.0,<0.10.0"
@@ -449,14 +449,14 @@ test = ["pytest"]
 
 [[package]]
 name = "textual"
-version = "0.1.17"
+version = "0.1.18"
 description = "Text User Interface using Rich"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-rich = ">=12.0.0,<13.0.0"
+rich = ">=12.3.0,<13.0.0"
 
 [[package]]
 name = "textual-inputs"
@@ -552,7 +552,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "e292e6290692ee4348bd6119263ac74b866c8682b039cdd7c097adaa9a91b14b"
+content-hash = "049a6c0ab79dce16c811770b1d8d27603eef6fd48a6d909a818fbb3ba2199af2"
 
 [metadata.files]
 ansicon = [
@@ -889,8 +889,8 @@ readchar = [
     {file = "readchar-3.0.5.tar.gz", hash = "sha256:d1f5b71e98c37b7f3b695fba9db978ab84f4f8a0ed879653d83e1d90a4c482c0"},
 ]
 rich = [
-    {file = "rich-12.0.1-py3-none-any.whl", hash = "sha256:ce5c714e984a2d185399e4e1dd1f8b2feacb7cecfc576f1522425643a36a57ea"},
-    {file = "rich-12.0.1.tar.gz", hash = "sha256:3fba9dd15ebe048e2795a02ac19baee79dc12cc50b074ef70f2958cd651b59a9"},
+    {file = "rich-12.3.0-py3-none-any.whl", hash = "sha256:0eb63013630c6ee1237e0e395d51cb23513de6b5531235e33889e8842bdf3a6f"},
+    {file = "rich-12.3.0.tar.gz", hash = "sha256:7e8700cda776337036a712ff0495b04052fb5f957c7dfb8df997f88350044b64"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
@@ -957,8 +957,8 @@ soxr = [
     {file = "soxr-0.2.7.tar.gz", hash = "sha256:fe260f8d4a5ee75a449e7a1e21411a933e28dc3ca4e869fe34ca2e88475912e2"},
 ]
 textual = [
-    {file = "textual-0.1.17-py3-none-any.whl", hash = "sha256:12c3e7d77faa76463e40e4eff58d591143770bb61780ecf0d2dae65e783896cd"},
-    {file = "textual-0.1.17.tar.gz", hash = "sha256:af6aa1fa34fe6d40689ce55a7bf519a07e48523a75b95cbed572990e0d6b6f84"},
+    {file = "textual-0.1.18-py3-none-any.whl", hash = "sha256:59110935418c597c1c50876edfd6799ad5b59d51a91ca6744fc45e36eb89638e"},
+    {file = "textual-0.1.18.tar.gz", hash = "sha256:b2883f8ed291de58b9aa73de6d24bbaae0174687487458a4eb2a7c188a2acf23"},
 ]
 textual-inputs = [
     {file = "textual-inputs-0.2.5.tar.gz", hash = "sha256:1a4a33c5817f3ded55596a6b5b0a1479cf9b03a371d2be7eb5d240e8115a92f4"},
