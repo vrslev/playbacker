@@ -34,5 +34,3 @@ pipx install playbacker
 
 - Setup configuration and storage files (example is in /example directory)
 - Run `playbacker`
-
-🧸❗️ This is a toy project! There's no release management, PyPI releases, etc for now.
