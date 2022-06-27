@@ -434,7 +434,7 @@ numpy = ["numpy"]
 
 [[package]]
 name = "soxr"
-version = "0.2.7"
+version = "0.3.0"
 description = "High quality, one-dimensional sample-rate conversion library"
 category = "main"
 optional = false
@@ -552,7 +552,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "11418a8b1b1b7f00f9cc8f119770040faf282ed88993302e17c5f109695585d2"
+content-hash = "dbce1816a8590625b66c23136e334dfb46e7a0fbfc3d81718f8f980020f5679d"
 
 [metadata.files]
 ansicon = [
@@ -913,50 +913,50 @@ soundfile = [
     {file = "SoundFile-0.10.3.post1.tar.gz", hash = "sha256:490cff42650733d1832728b937fe99fa1802896f5ef4d61bcf78cf7ebecb107b"},
 ]
 soxr = [
-    {file = "soxr-0.2.7-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:6a95c8f1b2a73a892a7a652191b7c5294f034af70adac945f5eea70e9974043d"},
-    {file = "soxr-0.2.7-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4619f262755ce9564a6bd8b843bb10511db66ebdab560c2a39c6dc8aba259ca7"},
-    {file = "soxr-0.2.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:51d7d2b9138b7067823cadd17bd9b0561bded4dc12cfbd1dc062e8c4b000ac91"},
-    {file = "soxr-0.2.7-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:71bb88d27cb9b37368d5b64ca29262c229b88697820678b57b4914b73bd80149"},
-    {file = "soxr-0.2.7-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:f6db2ade5788f88ca60aab701a0db91789ed165a2a5d8867cbe032c580f68c62"},
-    {file = "soxr-0.2.7-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:f28d00ba947d15262dd262bf7b67b132fb3c7bf11b95f703b53299887e7ab12a"},
-    {file = "soxr-0.2.7-cp310-cp310-win32.whl", hash = "sha256:7de22cfc9056109ef7c4c208616aa753fdcc937e946bcf8e9ab355bb8099e3b2"},
-    {file = "soxr-0.2.7-cp310-cp310-win_amd64.whl", hash = "sha256:cfcd5e95eed0e7feb1e893109ed3832478e52ea1d950e36789b79d016c1b8708"},
-    {file = "soxr-0.2.7-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:b3dc8d69f747d9ecee915f2183813f82a12591af25c870e0b351ddb1a8b18b7b"},
-    {file = "soxr-0.2.7-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:abbcbd7a8ccf471350bb143049fa0fed59545dd43fc1e50c932a3857d019b3d5"},
-    {file = "soxr-0.2.7-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1dc94b57378e9a945636f2665d4dcdefabac33420f0594bd87fe9a2755490ec3"},
-    {file = "soxr-0.2.7-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e9409604dfeb13dd3190fc0b14c0f358dad26390dee6473402422544d084d48a"},
-    {file = "soxr-0.2.7-cp36-cp36m-musllinux_1_1_i686.whl", hash = "sha256:ad3547a46d429f0eb3b3d2cbcbe95ea3d2b130e23f59c6c526f7dc85f780d76a"},
-    {file = "soxr-0.2.7-cp36-cp36m-musllinux_1_1_x86_64.whl", hash = "sha256:3f917e79bd14b9c29e679c522bd6625cff22fae43abbadd8b1d62bc50f2e5fa5"},
-    {file = "soxr-0.2.7-cp36-cp36m-win32.whl", hash = "sha256:1bfcca05e65d5bcea3aee4333e97f5d1548051235afc99a55e4f8768b27d10f6"},
-    {file = "soxr-0.2.7-cp36-cp36m-win_amd64.whl", hash = "sha256:1659ef6dbc97dea0e8a063c800aa0dbbe108c4d474589dc8ab964b624a2f0ec1"},
-    {file = "soxr-0.2.7-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:3ca7cf0f3942865c66248715f84e1225756e265afe6064c57cd0b5cd3be4349b"},
-    {file = "soxr-0.2.7-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:45f8f24c8f395bd78127771f5afce51b367a1b7d47e5e5de974d94e023730686"},
-    {file = "soxr-0.2.7-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:47b6a8b4f25e6118b3069ae51b59fbea1af8186460885fcd1906a302ecff7687"},
-    {file = "soxr-0.2.7-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:fbf8df46cedc40c2efdbd962a807883f2c7cc73f44c8451c2ed8ab0d87a7aeeb"},
-    {file = "soxr-0.2.7-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:36e8bb181c18c3262cd06fe114183a6cb32c77cdacb03c1835c60a1d7411e2a1"},
-    {file = "soxr-0.2.7-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:1f545813032708dfe88e7e21032d4cc71ce6855fc1740e5a63a2b897b5d04421"},
-    {file = "soxr-0.2.7-cp37-cp37m-win32.whl", hash = "sha256:f0da2f9ee0f952843a0d4d2374774dc32d3b799fc9de6f37426006c1fc73f03d"},
-    {file = "soxr-0.2.7-cp37-cp37m-win_amd64.whl", hash = "sha256:fc8b877f0ca2281d786a33a682c644d7e47503fe6f5bbb487728a5261eaee13f"},
-    {file = "soxr-0.2.7-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:7faf028c47817da5dce50002ec9dfea28ed6ce83c9df6265d5a128e80bff343f"},
-    {file = "soxr-0.2.7-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0301dabf2bdab69fd0dc1f8a24b29b0ed98c438b6f8aa1337576068b91b7ef13"},
-    {file = "soxr-0.2.7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d1ac1cb5c723cb4896bfeecef0ce11269349ff73a5b983eae037280be2ded23b"},
-    {file = "soxr-0.2.7-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:99d1b7ded839ad3f091d9ef29f6f75efc28b5649eaa5fcec3edbdab5ad2cccf2"},
-    {file = "soxr-0.2.7-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:f6569ef2938dea4566cea1a2160417f335d37e98f47b665d4ec6d62118cb5d91"},
-    {file = "soxr-0.2.7-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:0916654d291ae61b7191926e0defba0d6086d07bdae2053c13c1c68d5b41751c"},
-    {file = "soxr-0.2.7-cp38-cp38-win32.whl", hash = "sha256:ef9309034e4b71dc9612fa1c20f6ea009ac226445dcc86f84c1ee0abbd43cd3b"},
-    {file = "soxr-0.2.7-cp38-cp38-win_amd64.whl", hash = "sha256:0be953ed75c4d3245852ff88fe0b71ce87fc351e69583268bb8255334e16a613"},
-    {file = "soxr-0.2.7-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:a27e6ac25715cb6d0d76d0dbd92f2e8571bfb841172656b1282d864a34c443b1"},
-    {file = "soxr-0.2.7-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e2025fbfcfe9d9f0e0032abbd294b751a421ba69276240029bc22370bf2bd3ae"},
-    {file = "soxr-0.2.7-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9d387cd40649100bc427d970dc297d34009fb454d4e29ea7b9c20eb0af85b9c7"},
-    {file = "soxr-0.2.7-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:382752e386ffe914f386e3b17c22d0e8d6f7e634a6857533f893aa70318f1e2c"},
-    {file = "soxr-0.2.7-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:6c1ba53f84d3fd656e9c93e6f5edf88ebae3aa55517278b993ad46a5b9d97c63"},
-    {file = "soxr-0.2.7-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:bf33f00580d57dbdf23ead59bc288948d4340e5fb5564601dfa1c76b92d51d26"},
-    {file = "soxr-0.2.7-cp39-cp39-win32.whl", hash = "sha256:2885c0c3458714c18396fb617329d875caa12bc125997991debbad51bd286f74"},
-    {file = "soxr-0.2.7-cp39-cp39-win_amd64.whl", hash = "sha256:65e7610a7a78604bd6ee835b89987187dba392fa43b234153d2b8e2e015d7910"},
-    {file = "soxr-0.2.7-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bf73bd2061022ec013c683998cb2de777255f23568e16d521027f8ed1724ddf3"},
-    {file = "soxr-0.2.7-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:9ceb2b64132dbbcf82088a8decaaaa0eddd74a9a4eb275058eaf14978afa5c4e"},
-    {file = "soxr-0.2.7-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:1357264d1c3b3c8b57d1ac4b15cc80b8e78813d989fe2fb9a02929028624413a"},
-    {file = "soxr-0.2.7.tar.gz", hash = "sha256:fe260f8d4a5ee75a449e7a1e21411a933e28dc3ca4e869fe34ca2e88475912e2"},
+    {file = "soxr-0.3.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ff62f1be11314e2c24c54dccb61f48de4134ddbd8f45fd7f294d34eed6f4f3d5"},
+    {file = "soxr-0.3.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a94f78dc91e08c26921bea4ba3dc5e71cfc7fa1de2d7c93dddfd0496a29eaec9"},
+    {file = "soxr-0.3.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:64c4bda790214f4263822aebd3870336ed561ce50a47c31f1837f98d2ee80f9a"},
+    {file = "soxr-0.3.0-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:dfd9a162d3f9c5f3f2755af2029c9127a26a3092ca2c45ccd666be4342150527"},
+    {file = "soxr-0.3.0-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:68f39a1b7a056ae8ac74c9582fd715baeaf110bb12ae3579b239d7fcef01c85a"},
+    {file = "soxr-0.3.0-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:f350f8589f8761bc48936f75664af8073d8120d0d1e42673637e2d77df9161d3"},
+    {file = "soxr-0.3.0-cp310-cp310-win32.whl", hash = "sha256:4a86f3d2831ac79f503438356549c3b31a661e6a40345162794c8d33584eb3ba"},
+    {file = "soxr-0.3.0-cp310-cp310-win_amd64.whl", hash = "sha256:c9731a7b5acc50c8f38cc90806f25be0d39db795e93981fb2112753f9d684ecc"},
+    {file = "soxr-0.3.0-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:d2efc2efefb3d5c7d1d577db7c54c3ae6f99f67f3b00b46ee0c282921e128fb3"},
+    {file = "soxr-0.3.0-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ba82bbdfc84e41e24e000a7dde51f5d9315f22eaf4b7823ebd6d74f2545aef3c"},
+    {file = "soxr-0.3.0-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b36f1a0009d4fb6d87f62c607f4ae1d6b4b007ee4a5d33b6ed96b4ed29a5f7e6"},
+    {file = "soxr-0.3.0-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:62fd74dab22655682f2fec142c13e0131b9a8b7b4316d8c94c389a702c6984eb"},
+    {file = "soxr-0.3.0-cp36-cp36m-musllinux_1_1_i686.whl", hash = "sha256:f79763a9e4635ead463548305bc0d408321208757a2ede95daf6bcc975b8f516"},
+    {file = "soxr-0.3.0-cp36-cp36m-musllinux_1_1_x86_64.whl", hash = "sha256:7d202513afc75f0288c8f5a927670fb9c62a6db18af8b9d143f461991cd1f4a5"},
+    {file = "soxr-0.3.0-cp36-cp36m-win32.whl", hash = "sha256:9d45bd0a614cddd327da3cbd5e93583e00731aaa26f9eb1eb36880920f2975c1"},
+    {file = "soxr-0.3.0-cp36-cp36m-win_amd64.whl", hash = "sha256:e5daf3bca52130e61e090cf51e57de1af1e79bd3e4fd7926025a38b18c5d68bb"},
+    {file = "soxr-0.3.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:4c378200281435993f4364daf2265c225a96a9726081663ffd8db0e666aadcdf"},
+    {file = "soxr-0.3.0-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0603b9e97e37b36e22bc73a7c9503c12101951eb36a8d002463f60adb0d3f123"},
+    {file = "soxr-0.3.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d4459cb20ef71933943a0fdb43f35b1ff97cad5032efadab1e72600e7b38c2aa"},
+    {file = "soxr-0.3.0-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4f1c8f8addf9d23aa140c88ec34e19ebdaf0c6fb03bc08ae8ed9f5473a9c58da"},
+    {file = "soxr-0.3.0-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:306a370d48ece28f181cb7d579d7f89ef3b3c43d51dff010f6b89838a56462c3"},
+    {file = "soxr-0.3.0-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:5b47d4d95a850fe776dde2ffbb3a83be789aac2d718543ef8bcbe272479941e9"},
+    {file = "soxr-0.3.0-cp37-cp37m-win32.whl", hash = "sha256:5573c49d1425a88f067967cdc1be6b320af0cadd5be1a0531045110a4457a795"},
+    {file = "soxr-0.3.0-cp37-cp37m-win_amd64.whl", hash = "sha256:2338cc7c7a03ecc79c01286c5a1752b650fc2c45741347e10e2791b309580c23"},
+    {file = "soxr-0.3.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:70895bad6fd52957c6236ae4ff64fa36000550d2ec29557b452a014796eda699"},
+    {file = "soxr-0.3.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8b9237556da3b9585030469bda092177983c2c148d33c48b62db36b1cdf621ed"},
+    {file = "soxr-0.3.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:83287a58390f67c01f80e5aa732d6f38a65a0d74d8d4c94cf84cc8ad8b3e432f"},
+    {file = "soxr-0.3.0-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:7931f9de3a4e81617ca91953836def9c8c2aa734eafa709385768c5cea2497e0"},
+    {file = "soxr-0.3.0-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:6fa69ac01516dd4b0b4c7d5f2ef57a4a005dd43289226d4fb1d7632feba22aae"},
+    {file = "soxr-0.3.0-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:b98ccef1a8aa1b2bdc7e94f55e8d5cf38a0395f747b3ff8697832414619953bb"},
+    {file = "soxr-0.3.0-cp38-cp38-win32.whl", hash = "sha256:34dbff0dabe44f59242ce4fd99ec755fd94136e95f823302c6615ad49f09b503"},
+    {file = "soxr-0.3.0-cp38-cp38-win_amd64.whl", hash = "sha256:96691432498aa8d822c551a52b1082853716cd3c232b2443d3389ce28e65db9d"},
+    {file = "soxr-0.3.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:a06b332192e92caf2335b6f75b0ba777d730757b6eb892feb174beca9aea89d5"},
+    {file = "soxr-0.3.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4d72d9282ab3d79b0ef7d1227bff2b0f0af1e45dcdeec3eb294ff3673f367e52"},
+    {file = "soxr-0.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3370e92d34da229ba8ba371da104b87a8dfb3d9973298fd0e43f584be44c1c21"},
+    {file = "soxr-0.3.0-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:6b088dca3b079dc024f9a56da7e3a7973f3a9c257c524b77f8e6158829495f81"},
+    {file = "soxr-0.3.0-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:7d35ddbc5044ae9b299ebdf9ffe47ee01f1b9b3108a93458a31f8aa6c9f68a56"},
+    {file = "soxr-0.3.0-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:0f90f494e18aa149443a36595ac2d3b7496aa5fb099313f1d5e35c70174204d2"},
+    {file = "soxr-0.3.0-cp39-cp39-win32.whl", hash = "sha256:855475e8a9837576b6f08ca831ba3723b22065a664f0786f6dc6f1ed309ffd8b"},
+    {file = "soxr-0.3.0-cp39-cp39-win_amd64.whl", hash = "sha256:f1b160e2bc58ea4a2a578af0a853e8ddbc3cf78c83b1be8bd707208a1da47cc4"},
+    {file = "soxr-0.3.0-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:28e7014e3175ba58eca913ced345231b9ffbab0fbfdfb364080e3eefa616dfc8"},
+    {file = "soxr-0.3.0-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:56222e1048c69ac9084b6b55234520363a767a8909726c81773d489d228bde38"},
+    {file = "soxr-0.3.0-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:570181451f9c488ecf3b338442774bedac990773944d00b9e35bfdd3e0aa6b27"},
+    {file = "soxr-0.3.0.tar.gz", hash = "sha256:8772c1482683768843074097d5363461d781cd6168619cc7815cb728e5c901ee"},
 ]
 textual = [
     {file = "textual-0.1.18-py3-none-any.whl", hash = "sha256:59110935418c597c1c50876edfd6799ad5b59d51a91ca6744fc45e36eb89638e"},
