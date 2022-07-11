@@ -1,6 +1,7 @@
+from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Generic, Iterator, NamedTuple, Protocol, Sequence, TypeVar
+from typing import Generic, NamedTuple, Protocol, TypeVar
 
 from playbacker.audiofile import AudioFile
 from playbacker.clock import Clock

@@ -1,5 +1,6 @@
 import time
-from typing import Any, Callable, cast
+from collections.abc import Callable
+from typing import Any, cast
 from unittest.mock import Mock
 
 import numpy

@@ -1,8 +1,9 @@
 import os.path
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import Callable, Iterable, Optional, TextIO, TypeVar, cast
+from typing import Optional, TextIO, TypeVar, cast
 
 import inquirer
 import rich.traceback

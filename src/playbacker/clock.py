@@ -1,7 +1,8 @@
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from threading import Event, Thread
-from typing import Callable, NoReturn
+from typing import NoReturn
 
 
 @dataclass

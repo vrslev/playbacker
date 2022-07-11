@@ -1,7 +1,8 @@
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from threading import Event, Thread
-from typing import Any, Callable, Protocol
+from typing import Any, Protocol
 
 import sounddevice
 

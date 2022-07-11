@@ -1,5 +1,6 @@
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
-from typing import Callable, Generic, Iterable, Protocol, TypeVar
+from typing import Generic, Protocol, TypeVar
 
 from playbacker.audiofile import AudioArray, AudioFile
 from playbacker.stream import SoundGetter, Stream

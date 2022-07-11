@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from datetime import datetime, timedelta
-from typing import Callable, Union
+from typing import Union
 
 import rich.repr
 from rich.align import Align

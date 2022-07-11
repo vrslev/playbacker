@@ -1,6 +1,7 @@
+from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
 from threading import Thread
-from typing import Any, Iterable
+from typing import Any
 
 from pydantic import BaseModel
 
