@@ -45,6 +45,7 @@ reportImportCycles = false
 reportIncompatibleMethodOverride = false
 reportImplicitStringConcatenation = "warning"
 reportPrivateUsage = false
+useLibraryCodeForTypes = true
 
 [tool.black]
 target-version = ["py310"]
