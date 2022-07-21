@@ -38,11 +38,11 @@ playbacker = "playbacker.main:main"
 source = "git-tag"
 
 [tool.pyright]
+typeCheckingMode = "strict"
 ignore = [".venv"]
 reportMissingTypeStubs = false
 reportImportCycles = false
 reportIncompatibleMethodOverride = false
-reportUninitializedInstanceVariable = "warning"
 reportImplicitStringConcatenation = "warning"
 reportPrivateUsage = false
 

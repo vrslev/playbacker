@@ -37,7 +37,7 @@ def test_convert_channel_map_to_coreaudio_format(
 
 @pytest.mark.parametrize(("map", "limit"), zip(channel_maps, channel_limits))
 def test_allocate_data_to_channels(map: list[int], limit: int):
-    data = numpy.ndarray((1, 2))
+    data: numpy.ndarray[Any, Any] = numpy.ndarray((1, 2))
     data.fill(0)
 
     res = allocate_data_to_channels(data, channel_map=map, channel_limit=limit)
@@ -108,7 +108,7 @@ def call_callback_in_mock_stream(
     )
     stream.sound_getter = get_sound
 
-    outdata = numpy.ndarray((1, channel_limit))
+    outdata: numpy.ndarray[Any, Any] = numpy.ndarray((1, channel_limit))
     outdata.fill(0)
 
     stream._callback(outdata=outdata, frames=512, time=..., status=cast(Any, ...))
@@ -120,7 +120,7 @@ def test_callback_with_sound(map: list[int], limit: int):
     file_channels = 2
 
     def get_sound(frames: int):
-        array = numpy.ndarray((1, file_channels))
+        array: numpy.ndarray[Any, Any] = numpy.ndarray((1, file_channels))
         array.fill(1)
         return array
 
