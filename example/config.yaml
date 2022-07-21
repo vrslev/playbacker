@@ -1,5 +1,6 @@
-preferred_devices:
+devices:
   - name:
+    pretty_name: default
     sample_rate: 44100
     channel_map:
       metronome: [1]

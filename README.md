@@ -33,4 +33,4 @@ pipx install playbacker
 ## Usage
 
 - Setup configuration and storage files (example is in /example directory)
-- Run `playbacker`
+- Run `playbacker <PRETTY DEVICE NAME FROM CONFIG>`, for example, `playbacker default`

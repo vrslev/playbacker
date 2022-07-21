@@ -10,7 +10,7 @@ from playbacker.track import Shared, SoundTrack, StreamBuilder, trim_audio_array
 
 @pytest.mark.parametrize(("data_length", "expected_length"), ((512, 256), (220, 200)))
 def test_trim_audio_array(data_length: int, expected_length: int):
-    data = numpy.ndarray((data_length, 1))
+    data: numpy.ndarray[Any, Any] = numpy.ndarray((data_length, 1))
     data.fill(0)
     data[30] = 1
 
@@ -67,7 +67,7 @@ def test_callback_not_none(sound_track: SoundTrack[Any]):
     sound_track._should_be_silent = lambda: False
     sound_track.current_frame = 10
 
-    data = numpy.ndarray((512, 1))
+    data: numpy.ndarray[Any, Any] = numpy.ndarray((512, 1))
     data.fill(0)
     sound_track.get_sound = lambda: data
 

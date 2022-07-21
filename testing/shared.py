@@ -13,7 +13,7 @@ from playbacker.tempo import Tempo
 paths = get_paths(base_dir=str(Path(__file__).parent.parent / "example"))
 
 with paths.default_config.open() as f:
-    settings = load_settings(content=yaml.safe_load(f))
+    settings = load_settings(content=yaml.safe_load(f), device_name="default")
 
 player = Player(Playback(settings))
 song = Song(
