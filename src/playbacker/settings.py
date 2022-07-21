@@ -30,6 +30,7 @@ class Settings(BaseModel, frozen=True):
 
 class _Device(BaseModel):
     name: str | None
+    pretty_name: str
     sample_rate: int
     channel_map: _ChannelMap
 
@@ -53,7 +54,7 @@ class _SoundPaths(BaseModel):
 
 
 class _FileSettings(BaseModel):
-    preferred_devices: list[_Device]
+    devices: list[_Device]
     sounds: _SoundPaths
 
 
@@ -61,23 +62,18 @@ class _DeviceProps(TypedDict):
     max_output_channels: int
 
 
-def _get_available_device(devices: list[_Device]) -> tuple[_Device, _DeviceProps]:
-    exc = None
+def _find_device_in_settings(name: str, devices: list[_Device]) -> _Device:
+    for device in devices:
+        if device.pretty_name == name:
+            return device
 
-    for dev in devices:
-        try:
-            return (
-                dev,
-                sounddevice.query_devices(  # pyright: ignore
-                    device=dev.name, kind="output"
-                ),
-            )
-        except ValueError as e:
-            exc = e
-            continue
+    raise Exception(f"Device {name} not found in config")
 
-    assert exc
-    raise exc
+
+def _get_device_props(device: _Device) -> _DeviceProps:
+    return sounddevice.query_devices(  # pyright: ignore
+        device=device.name, kind="output"
+    )
 
 
 def _get_channel_limit(device: _Device, device_props: _DeviceProps):
@@ -95,8 +91,9 @@ def _get_channel_limit(device: _Device, device_props: _DeviceProps):
     return limit
 
 
-def _convert_file_settings(settings: _FileSettings) -> Settings:
-    device, props = _get_available_device(settings.preferred_devices)
+def _convert_file_settings(settings: _FileSettings, device_name: str) -> Settings:
+    device = _find_device_in_settings(name=device_name, devices=settings.devices)
+    props = _get_device_props(device)
     channel_limit = _get_channel_limit(device, props)
     metronome = settings.sounds.metronome
     countdown = settings.sounds.countdown
@@ -122,5 +119,5 @@ def _convert_file_settings(settings: _FileSettings) -> Settings:
     )
 
 
-def load_settings(content: Any) -> Settings:
-    return _convert_file_settings(_FileSettings(**content))
+def load_settings(content: Any, device_name: str) -> Settings:
+    return _convert_file_settings(_FileSettings(**content), device_name)

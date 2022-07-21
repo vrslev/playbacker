@@ -98,8 +98,9 @@ def _load_configs_and_run(
     setlist_file: typer.FileText | None,
     songs_file: typer.FileText,
     log_file: Path,
+    device: str,
 ) -> None:
-    settings = load_settings(content=yaml.safe_load(settings_file))
+    settings = load_settings(content=yaml.safe_load(settings_file), device_name=device)
     songs = load_songs(
         content=yaml.safe_load(songs_file), sample_rate=settings.sample_rate
     )
@@ -109,6 +110,7 @@ def _load_configs_and_run(
 
 def get_main_command(paths: Paths) -> Callable[..., None]:
     def command(
+        device: str = typer.Argument(...),
         setlist: _OptionalFileText = typer.Argument(None),
         settings: typer.FileText = typer.Option(paths.default_config),
         songs: typer.FileText = typer.Option(paths.default_songs),
@@ -118,6 +120,7 @@ def get_main_command(paths: Paths) -> Callable[..., None]:
             setlist_file=setlist,
             songs_file=songs,
             log_file=paths.log,
+            device=device,
         )
 
     return command
