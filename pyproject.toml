@@ -17,7 +17,7 @@ PyYAML = "6.0"
 textual = "0.1.18"
 typer = "0.6.1"
 uvloop = "0.16.0"
-inquirer = "2.9.2"
+inquirer = "2.10.0"
 soxr = "0.3.0"
 textual-inputs = "0.2.6"
 
