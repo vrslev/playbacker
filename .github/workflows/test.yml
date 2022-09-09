@@ -57,7 +57,7 @@ jobs:
 
       - name: Install package
         run: |
-          pip install -U pip
+          pip install -U poetry
           poetry install
 
       - name: Install Pyright
