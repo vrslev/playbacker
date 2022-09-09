@@ -55,19 +55,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
 
-      - name: Install Poetry
+      - name: Install package
         run: |
           pip install -U poetry
-          poetry config virtualenvs.create false
-
-      - name: Install package
-        run: poetry install
+          poetry install
 
       - name: Install Pyright
         run: npm install -g --no-package-lock --no-save pyright
 
       - name: Check types
-        run: pyright
+        run: poetry run pyright
 
   test:
     runs-on: ubuntu-latest
