@@ -22,7 +22,7 @@ soxr = "0.3.2"
 textual-inputs = "0.2.6"
 
 [tool.poetry.dev-dependencies]
-black = "22.8.0"
+black = "22.10.0"
 pre-commit = "2.20.0"
 pytest = "7.1.3"
 pytest-cov = "4.0.0"
