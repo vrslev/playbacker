@@ -169,11 +169,11 @@ python-versions = "*"
 
 [[package]]
 name = "inquirer"
-version = "2.10.1"
+version = "3.0.0"
 description = "Collection of common interactive command line user interfaces, based on Inquirer.js"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 blessed = ">=1.19.0"
@@ -579,7 +579,7 @@ test = ["pytest (>=3.0.0)", "pytest-cov"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "275273f985b685921c86193c072474d66468571926143d0e748e6502d294e8ad"
+content-hash = "b87075ac65a1d557f6149aed5c6852d3097bcb6800ac1dea4aa36a92ae5c685f"
 
 [metadata.files]
 ansicon = [
@@ -772,8 +772,8 @@ iniconfig = [
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
 inquirer = [
-    {file = "inquirer-2.10.1-py3-none-any.whl", hash = "sha256:7a01977602214d6d86e8ddef3a1300927c4e58223eab69893e550604a0ac9477"},
-    {file = "inquirer-2.10.1.tar.gz", hash = "sha256:e9876258183e24f6e8c44136b04f6f2e18dd6684aee59b86a8057c50601a6523"},
+    {file = "inquirer-3.0.0-py3-none-any.whl", hash = "sha256:a16c93ded4f9ead42812067f386999aec74d10f131d9a2f7c9e5be131e9f9899"},
+    {file = "inquirer-3.0.0.tar.gz", hash = "sha256:528725bfd7e18b063727529d2983cfa61e0e512042365a7697d89930588cb686"},
 ]
 jinxed = [
     {file = "jinxed-1.2.0-py2.py3-none-any.whl", hash = "sha256:cfc2b2e4e3b4326954d546ba6d6b9a7a796ddcb0aef8d03161d005177eb0d48b"},
