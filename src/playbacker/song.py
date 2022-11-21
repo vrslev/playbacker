@@ -32,7 +32,7 @@ class _TrackPaths(BaseModel):
     guide: Path | None = None
 
 
-class _FileSong(_SongBase):
+class _FileSong(_SongBase, frozen=True):
     tracks: _TrackPaths = Field(default_factory=_TrackPaths)
 
 
