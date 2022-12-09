@@ -8,7 +8,6 @@ from playbacker.song import Song
 class Setlist(BaseModel):
     name: str
     songs: list[Song]
-    preloaded: bool = False
 
     def _get_song_idx(self, song: Song) -> int:
         try:

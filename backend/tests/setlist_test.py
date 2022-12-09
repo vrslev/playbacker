@@ -1,11 +1,14 @@
-import time
 import uuid
 from typing import Any, cast
-from unittest.mock import PropertyMock
 
 import pytest
 
-from playbacker.setlist import Setlist, _find_song_in_storage, load_setlist
+from playbacker.setlist import (
+    NoSongInStorageError,
+    Setlist,
+    _find_song_in_storage,
+    load_setlist,
+)
 from playbacker.song import Song
 from tests.conftest import generate_tempo
 
@@ -18,23 +21,6 @@ def gen_song():
 def setlist():
     songs = [gen_song() for _ in range(10)]
     return Setlist(name="", songs=songs)
-
-
-def test_preload_songs(setlist: Setlist):
-    mocks: list[PropertyMock] = []
-    new_songs: list[Song] = []
-
-    for song in setlist.songs:
-        song = Song(artist=song.artist, tempo=song.tempo, name=song.name)
-        new_songs.append(song)
-
-    setlist.songs = new_songs
-
-    while not setlist.preloaded:
-        time.sleep(0.01)
-
-    for mock in mocks:
-        mock.assert_called_once()
 
 
 def test_get_song_idx(setlist: Setlist):
@@ -59,7 +45,7 @@ def test_find_song_in_storage():
     songs = [gen_song() for _ in range(5)]
     assert _find_song_in_storage(name=songs[2].name, storage=songs) == songs[2]
 
-    with pytest.raises(RuntimeError):
+    with pytest.raises(NoSongInStorageError):
         _find_song_in_storage(name="asong", storage=songs)
 
 
