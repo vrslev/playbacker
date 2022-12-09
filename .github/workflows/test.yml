@@ -34,20 +34,21 @@ jobs:
     defaults:
       run:
         working-directory: backend
+
     # env:
     #   POETRY_VIRTUALENVS_PATH: ~/.cache/pypoetry/virtualenvs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: pipx install poetry
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
-          cache: poetry
-          cache-dependency-path: backend/poetry.lock
-      - run: |
-          # poetry env use python3.11
-          poetry install
+      - uses: actions/cache@v3
+        with:
+          path: /home/runner/.cache/pypoetry/virtualenvs
+          key: hashFiles('backend/poetry.lock')
+      - run: pip install -U poetry
+      - run: poetry install
       - run: sudo apt-get install -y --no-install-recommends libsndfile-dev portaudio19-dev
       - run: poetry run pyright
       - run: poetry run pytest --color=yes --cov
