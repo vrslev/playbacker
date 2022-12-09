@@ -1,0 +1,12 @@
+{
+  "venvPath": "backend",
+  "venv": ".venv",
+  "typeCheckingMode": "strict",
+  "ignore": [".venv"],
+  "reportMissingTypeStubs": false,
+  "reportImportCycles": false,
+  "reportIncompatibleMethodOverride": false,
+  "reportImplicitStringConcatenation": "warning",
+  "reportPrivateUsage": false,
+  "useLibraryCodeForTypes": true
+}
