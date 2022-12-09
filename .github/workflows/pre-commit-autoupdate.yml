@@ -1,21 +1,16 @@
-name: Autoupdate pre-commit hooks
+name: Update pre-commit hooks
 
 on:
   schedule:
     - cron: 0 7 * * 1
 
 jobs:
-  pre-commit-autoupdate:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Update pre-commit hooks
-        uses: vrslev/pre-commit-autoupdate@v1.0.0
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+      - uses: actions/checkout@v2
+      - uses: vrslev/pre-commit-autoupdate@v1.0.0
+      - uses: peter-evans/create-pull-request@v3
         with:
           branch: pre-commit-autoupdate
           title: "Update pre-commit hooks"
