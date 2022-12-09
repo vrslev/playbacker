@@ -2,6 +2,7 @@ from pathlib import Path
 from time import sleep
 from typing import TypeVar
 
+import uvicorn
 import yaml
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware import Middleware
@@ -91,3 +92,12 @@ def _():
 @app.post("/reset")
 def _():
     player.reset()
+
+
+def main():
+    uvicorn.run(  # pyright: ignore[reportUnknownMemberType]
+        app="playbacker.main:app",
+        reload=True,
+        reload_dirs=[".", str(base)],
+        reload_includes=["*.py", "*.yaml"],
+    )
