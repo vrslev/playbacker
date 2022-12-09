@@ -1,30 +1,17 @@
-import random
 import time
 import uuid
-from pathlib import Path
 from typing import Any, cast
 from unittest.mock import PropertyMock
 
 import pytest
 
-from playbacker.audiofile import AudioFile
 from playbacker.setlist import Setlist, _find_song_in_storage, load_setlist
-from playbacker.song import Song, SongTracks
-from tests.conftest import generate_tempo, get_audiofile_mock
+from playbacker.song import Song
+from tests.conftest import generate_tempo
 
 
 def gen_song():
-    multitrack, guide = None, None
-    if random.random() > 0.6:
-        multitrack = AudioFile(path=Path("multitrack"), sample_rate=44100)
-    if random.random() > 0.6:
-        guide = AudioFile(path=Path("guide"), sample_rate=44100)
-    return Song(
-        artist=None,
-        tempo=generate_tempo(),
-        name=str(uuid.uuid4()),
-        tracks=SongTracks(multitrack=multitrack, guide=guide),
-    )
+    return Song(artist=None, tempo=generate_tempo(), name=str(uuid.uuid4()))
 
 
 @pytest.fixture
@@ -33,31 +20,15 @@ def setlist():
     return Setlist(name="", songs=songs)
 
 
-def test_collect_audiofiles(setlist: Setlist):
-    assert all(
-        isinstance(audiofile, AudioFile) for audiofile in setlist._collect_audiofiles()
-    )
-
-
 def test_preload_songs(setlist: Setlist):
     mocks: list[PropertyMock] = []
     new_songs: list[Song] = []
 
-    def audiofile_mock():
-        mock, prop_mock = get_audiofile_mock()
-        mocks.append(prop_mock)
-        return mock
-
     for song in setlist.songs:
-        tracks = SongTracks.construct(
-            multitrack=audiofile_mock() if song.tracks.multitrack else None,
-            guide=audiofile_mock() if song.tracks.guide else None,
-        )
-        song = Song(artist=song.artist, tempo=song.tempo, name=song.name, tracks=tracks)
+        song = Song(artist=song.artist, tempo=song.tempo, name=song.name)
         new_songs.append(song)
 
     setlist.songs = new_songs
-    setlist.preload_songs()
 
     while not setlist.preloaded:
         time.sleep(0.01)

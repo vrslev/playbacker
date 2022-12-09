@@ -3,14 +3,12 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Generic, NamedTuple, Protocol, TypeVar
 
-from playbacker.audiofile import AudioFile
 from playbacker.clock import Clock
 from playbacker.settings import Settings
 from playbacker.stream import SounddeviceStream
 from playbacker.tempo import Tempo
 from playbacker.track import Shared, StreamBuilder, Track
 from playbacker.tracks.countdown import CountdownTrack
-from playbacker.tracks.file import FileTrack
 from playbacker.tracks.metronome import MetronomeTrack
 
 _Tracks = TypeVar("_Tracks", bound=Sequence[Track])
@@ -77,8 +75,6 @@ class BasePlayback(Generic[_Tracks], Protocol):
 class DefaultTracks(NamedTuple):
     metronome: MetronomeTrack
     countdown: CountdownTrack
-    multitrack: FileTrack
-    guide: FileTrack
 
 
 @dataclass
@@ -110,23 +106,9 @@ class Playback(BasePlayback[DefaultTracks]):
                 sounds=self.settings.sounds.countdown,
                 stream_builder=builder(map.guide),
             ),
-            multitrack=FileTrack(
-                shared=self.shared, stream_builder=builder(map.multitrack)
-            ),
-            guide=FileTrack(shared=self.shared, stream_builder=builder(map.guide)),
         )
 
-    def start(
-        self,
-        tempo: Tempo,
-        multitrack: AudioFile | None = None,
-        guide: AudioFile | None = None,
-    ) -> None:
+    def start(self, tempo: Tempo) -> None:
         with self.starting_ctx(tempo):
             self.tracks.metronome.start()
             self.tracks.countdown.start()
-            self.tracks.multitrack.start(file=multitrack)
-            self.tracks.guide.start(file=guide)
-
-            if guide:
-                self.tracks.countdown.enabled = False

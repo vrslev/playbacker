@@ -1,135 +1,93 @@
-import os.path
-from collections.abc import Callable, Iterable
-from dataclasses import dataclass
-from functools import lru_cache
 from pathlib import Path
-from typing import Optional, TextIO, TypeVar, cast
+from time import sleep
+from typing import TypeVar
 
-import inquirer
-import rich.traceback
-import typer
-import typer.main
 import yaml
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware import Middleware
+from fastapi.middleware.cors import CORSMiddleware
 
-from playbacker.app.main import PlaybackerApp
-from playbacker.setlist import Setlist, load_setlist
-from playbacker.settings import Settings, load_settings
-from playbacker.song import Song, load_songs
+from playbacker.playback import Playback
+from playbacker.player import Player
+from playbacker.setlist import NoSongInStorageError, Setlist, load_setlist
+from playbacker.settings import load_settings
+from playbacker.song import load_songs
+from playbacker.tempo import Tempo
 
-rich.traceback.install(show_locals=True)
+app = FastAPI(
+    middleware=[
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    ]
+)
+base = Path("~/.config/playbacker").expanduser()
 
+device = "default"
+with (base / "config.yaml").open() as f:
+    settings = load_settings(content=yaml.safe_load(f), device_name=device)
+with (base / "songs.yaml").open() as f:
+    songs = load_songs(content=yaml.safe_load(f))
 
-@dataclass
-class Paths:
-    base_dir: Path
-    setlists_dir: Path
-    default_config: Path
-    default_songs: Path
-    log: Path
+setlists_dir = base / "setlists"
+assert setlists_dir.exists()
 
+player = Player(Playback(settings))
 
-@lru_cache
-def get_paths(base_dir: str = "~/.config/playbacker") -> Paths:
-    base = Path(base_dir).expanduser()
-    return Paths(
-        base_dir=base,
-        default_config=base / "config.yaml",
-        default_songs=base / "songs.yaml",
-        setlists_dir=base / "setlists",
-        log=base / "tui.log",
-    )
+T = TypeVar("T")
 
 
 def prettify_setlist_stem(stem: str) -> str:
     return " ".join(w.capitalize() for w in stem.split())
 
 
-def get_setlist_name_to_path_map(files: Iterable[Path]) -> dict[str, Path]:
-    return {prettify_setlist_stem(file.stem): file for file in files}
+@app.post("/getSetlists")
+def _():
+    sleep(1)
+    lst = list[str]()
+    for file in setlists_dir.glob("*.yaml"):
+        lst.append(prettify_setlist_stem(file.stem))
+    lst.sort(reverse=True)
+    return lst
 
 
-_T = TypeVar("_T")
-
-
-def prompt_list(message: str, name_to_value: dict[str, _T]) -> _T:
-    question = inquirer.List(
-        name=message, message="Select a setlist", choices=name_to_value.keys()
-    )
-    response = cast(
-        dict[str, str], inquirer.prompt([question], raise_keyboard_interrupt=True)
-    )
-    return name_to_value[response[message]]
-
-
-def prompt_for_setlist() -> Path:
-    files = get_paths().setlists_dir.glob("*.yaml")
-    files = sorted(files, key=os.path.getmtime, reverse=True)
-    map = get_setlist_name_to_path_map(files)
-    return prompt_list("Select a setlist", map)
-
-
-def _get_pretty_setlist_name(file_name: str) -> str:
-    return prettify_setlist_stem(Path(file_name).stem)
-
-
-def _load_setlist_with_prompt(
-    setlist_file: typer.FileText | None, songs: list[Song]
-) -> Setlist:
-    def load(file: TextIO) -> Setlist:
-        name = _get_pretty_setlist_name(file.name)
-        return load_setlist(name=name, content=yaml.safe_load(file), songs=songs)
-
-    if setlist_file:
-        return load(setlist_file)
+@app.post("/getSetlist")
+def _(name: str) -> Setlist:
+    map = {prettify_setlist_stem(f.stem): f for f in setlists_dir.glob("*.yaml")}
+    if path := map.get(name):
+        with path.open() as f:
+            try:
+                return load_setlist(name=name, content=yaml.safe_load(f), songs=songs)
+            except NoSongInStorageError as err:
+                raise HTTPException(404, err.message)
     else:
-        with prompt_for_setlist().open() as f:
-            return load(f)
+        raise HTTPException(404, "no setlist with this name")
 
 
-_OptionalFileText = Optional[typer.FileText]  # Skip pyupgrade
+@app.post("/play")
+def _(tempo: Tempo):
+    player.play(tempo)
 
 
-def run_tui(settings: Settings, setlist: Setlist, log: Path) -> None:
-    PlaybackerApp.run(title="Playbacker", log=log, settings=settings, setlist=setlist)
+@app.post("/pause")
+def _():
+    player.pause()
 
 
-def _load_configs_and_run(
-    settings_file: typer.FileText,
-    setlist_file: typer.FileText | None,
-    songs_file: typer.FileText,
-    log_file: Path,
-    device: str,
-) -> None:
-    settings = load_settings(content=yaml.safe_load(settings_file), device_name=device)
-    songs = load_songs(
-        content=yaml.safe_load(songs_file), sample_rate=settings.sample_rate
-    )
-    setlist = _load_setlist_with_prompt(setlist_file=setlist_file, songs=songs)
-    run_tui(settings=settings, setlist=setlist, log=log_file)
+@app.post("/enableGuide")
+def _():
+    player.enable_guide()
 
 
-def get_main_command(paths: Paths) -> Callable[..., None]:
-    def command(
-        device: str = typer.Argument(...),
-        setlist: _OptionalFileText = typer.Argument(None),
-        settings: typer.FileText = typer.Option(paths.default_config),
-        songs: typer.FileText = typer.Option(paths.default_songs),
-    ) -> None:
-        _load_configs_and_run(
-            settings_file=settings,
-            setlist_file=setlist,
-            songs_file=songs,
-            log_file=paths.log,
-            device=device,
-        )
-
-    return command
+@app.post("/disableGuide")
+def _():
+    player.disable_guide()
 
 
-def main() -> None:
-    paths = get_paths()
-    command = get_main_command(paths)
-    typer.run(command)
-
-
-# pyright: reportUnknownMemberType=false
+@app.post("/reset")
+def _():
+    player.reset()

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from playbacker.playback import Playback
-from playbacker.song import Song
+from playbacker.tempo import Tempo
 
 
 @dataclass(init=False)
@@ -9,29 +9,19 @@ class Player:
     """Remembers current start-stop and pause-resume states."""
 
     playback: Playback
-    song: Song | None = None
+    tempo: Tempo | None = None
     started: bool = False
     paused: bool = False
 
     def __init__(self, playback: Playback) -> None:
         self.playback = playback
 
-    def _resume(self) -> None:
-        self.playback.resume()
-        self.paused = False
-
-    def _start(self, song: Song) -> None:
-        self.song = song
-        self.playback.start(
-            tempo=song.tempo, multitrack=song.tracks.multitrack, guide=song.tracks.guide
-        )
-
-    def start(self, song: Song) -> None:
-        if self.song == song:
-            self._resume()
+    def play(self, tempo: Tempo) -> None:
+        if self.tempo == tempo:
+            self.playback.resume()
         else:
-            self.multitrack_enabled = True
-            self._start(song)
+            self.tempo = tempo
+            self.playback.start(tempo=tempo)
 
         self.paused = False
         self.started = True
@@ -42,30 +32,19 @@ class Player:
 
     def reset(self) -> None:
         self.pause()
-        self.song = None
+        self.tempo = None
 
     def stop(self) -> None:
         self.playback.destroy()
         self.started = False
 
-    @property
-    def multitrack_enabled(self) -> bool:
-        return self.playback.tracks.multitrack.enabled
+    def enable_guide(self) -> None:
+        self.playback.tracks.countdown.enabled = True
 
-    @multitrack_enabled.setter
-    def multitrack_enabled(self, __value: bool) -> None:
-        self.playback.tracks.multitrack.enabled = __value
-
-    def toggle_guide(self, value: bool) -> None:
-        if value:
-            guide_should_play = bool(self.playback.tracks.guide.sounds.file)
-            self.playback.tracks.guide.enabled = guide_should_play
-            self.playback.tracks.countdown.enabled = not guide_should_play
-        else:
-            self.playback.tracks.countdown.enabled = False
-            self.playback.tracks.guide.enabled = False
+    def disable_guide(self) -> None:
+        self.playback.tracks.countdown.enabled = False
 
     def time(self) -> float:
-        if self.started and self.song:
+        if self.started and self.tempo:
             return self.playback.shared.tempo.lag * self.playback.shared.position
         return 0

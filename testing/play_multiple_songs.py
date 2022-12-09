@@ -1,30 +1,27 @@
 import time
 
-from shared import player, run, song
+from shared import player, run, tempo
 
-from playbacker.song import Song
 from playbacker.tempo import Tempo
 
 
 def main():
-    player.start(song)
+    player.play(tempo)
     time.sleep(4)
 
     player.pause()
     time.sleep(1)
 
-    tempo = Tempo(
-        bpm=150, time_signature=song.tempo.time_signature, duration=song.tempo.duration
+    new_tempo = Tempo(
+        bpm=150, time_signature=tempo.time_signature, duration=tempo.duration
     )
-    new_song = Song(name=song.name, artist=song.name, tempo=tempo)
-
-    player.start(new_song)
+    player.play(new_tempo)
     time.sleep(4)
 
     player.pause()
     time.sleep(1)
 
-    player.start(song)
+    player.play(tempo)
 
 
 run(main)

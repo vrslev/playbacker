@@ -1,11 +1,7 @@
-from collections.abc import Iterable
-from concurrent.futures import ThreadPoolExecutor
-from threading import Thread
 from typing import Any
 
 from pydantic import BaseModel
 
-from playbacker.audiofile import AudioFile
 from playbacker.song import Song
 
 
@@ -13,29 +9,6 @@ class Setlist(BaseModel):
     name: str
     songs: list[Song]
     preloaded: bool = False
-
-    def _collect_audiofiles(self) -> Iterable[AudioFile]:
-        for song in self.songs:
-            if song.tracks.multitrack:
-                yield song.tracks.multitrack
-            if song.tracks.guide:
-                yield song.tracks.guide
-
-    def _preload_songs_in_pool(self) -> None:
-        def func(audiofile: AudioFile):
-            def inner():
-                audiofile.data
-
-            return inner
-
-        with ThreadPoolExecutor(5) as pool:
-            for audiofile in self._collect_audiofiles():
-                pool.submit(func(audiofile))
-
-        self.preloaded = True
-
-    def preload_songs(self) -> None:
-        Thread(target=self._preload_songs_in_pool, daemon=True).start()
 
     def _get_song_idx(self, song: Song) -> int:
         try:
@@ -55,12 +28,20 @@ class Setlist(BaseModel):
             return self.songs[0]
 
 
+class NoSongInStorageError(Exception):
+    message: str
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+        super().__init__()
+
+
 def _find_song_in_storage(name: str, storage: list[Song]):
     for song in storage:
         if song.name == name:
             return song
 
-    raise RuntimeError(f'Song "{name}" is not present in storage')
+    raise NoSongInStorageError(f'Song "{name}" is not present in storage')
 
 
 class _FileSetlist(BaseModel):

@@ -1,11 +1,11 @@
 import time
 from random import random
 
-from shared import player, run, song
+from shared import player, run, tempo
 
 
 def main():
-    player.start(song)
+    player.play(tempo)
     print("Waiting...")
     time.sleep(random() * 1.33 + 5)
 
@@ -13,7 +13,7 @@ def main():
     print("Paused.")
     time.sleep(1.1)
 
-    player.start(song)
+    player.play(tempo)
     print("Resumed.")
 
 

@@ -1,8 +1,8 @@
-from shared import player, run, song
+from shared import player, run, tempo
 
 
 def main():
-    player.start(song)
+    player.play(tempo)
 
 
 run(main)

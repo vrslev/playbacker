@@ -14,12 +14,12 @@ SoundFile = "0.11.0"
 numpy = "1.23.5"
 pydantic = "1.10.2"
 PyYAML = "6.0"
-textual = "0.1.18"
 typer = "0.7.0"
 uvloop = "0.17.0"
 inquirer = "3.0.0"
 soxr = "0.3.3"
-textual-inputs = "0.2.6"
+fastapi = "0.88.0"
+uvicorn = {extras = ["standard"], version = "0.20.0"}
 
 [tool.poetry.dev-dependencies]
 black = "22.10.0"
