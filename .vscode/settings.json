@@ -1,3 +1,12 @@
 {
-  "python.analysis.diagnosticMode": "workspace"
+  "python.analysis.diagnosticMode": "workspace",
+  "[typescript]": {
+    "editor.tabSize": 2,
+    // tailwind autocomplete in tsx
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.inlineSuggest.enabled": true
+  },
+  "eslint.workingDirectories": ["frontend"]
 }

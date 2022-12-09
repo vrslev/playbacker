@@ -1,5 +1,7 @@
+.DS_Store
+dist
 __pycache__
 .venv
-.DS_Store
 .pytest_cache
 .coverage
+node_modules
