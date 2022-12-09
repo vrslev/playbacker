@@ -42,7 +42,9 @@ jobs:
         with:
           python-version: 3.11
           cache: poetry
-      - run: poetry install
+      - run: |
+          poetry env use python3.11
+          poetry install
       - run: sudo apt-get install -y --no-install-recommends libsndfile-dev portaudio19-dev
       - run: poetry run pyright
       - run: poetry run pytest --color=yes --cov

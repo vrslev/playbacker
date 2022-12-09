@@ -1,8 +1,7 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 from pydantic import BaseModel, Field
-from typing_extensions import Self
 
 from playbacker.tempo import Tempo
 
