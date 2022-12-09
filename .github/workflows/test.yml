@@ -34,8 +34,8 @@ jobs:
     defaults:
       run:
         working-directory: backend
-    env:
-      POETRY_VIRTUALENVS_PATH: ~/.cache/pypoetry/virtualenvs
+    # env:
+    #   POETRY_VIRTUALENVS_PATH: ~/.cache/pypoetry/virtualenvs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -44,8 +44,9 @@ jobs:
         with:
           python-version: 3.11
           cache: poetry
+          cache-dependency-path: backend/poetry.lock
       - run: |
-          poetry env use python3.11
+          # poetry env use python3.11
           poetry install
       - run: sudo apt-get install -y --no-install-recommends libsndfile-dev portaudio19-dev
       - run: poetry run pyright
