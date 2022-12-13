@@ -1,6 +1,4 @@
 from pathlib import Path
-from time import sleep
-from typing import TypeVar
 
 import uvicorn
 import yaml
@@ -39,8 +37,6 @@ assert setlists_dir.exists()
 
 player = Player(Playback(settings))
 
-T = TypeVar("T")
-
 
 def prettify_setlist_stem(stem: str) -> str:
     return " ".join(w.capitalize() for w in stem.split())
@@ -48,7 +44,6 @@ def prettify_setlist_stem(stem: str) -> str:
 
 @app.post("/getSetlists")
 def _():
-    sleep(1)
     lst = list[str]()
     for file in setlists_dir.glob("*.yaml"):
         lst.append(prettify_setlist_stem(file.stem))

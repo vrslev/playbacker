@@ -21,6 +21,7 @@ class Player:
             self.playback.resume()
         else:
             self.tempo = tempo
+            self.enable_guide()
             self.playback.start(tempo=tempo)
 
         self.paused = False
