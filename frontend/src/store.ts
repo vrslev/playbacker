@@ -1,18 +1,8 @@
 import { createStorageSignal } from "@solid-primitives/storage";
-import {
-  Context,
-  createContext,
-  createEffect,
-  createResource,
-  createSignal,
-  on,
-  ParentProps,
-  useContext,
-} from "solid-js";
-import { Player } from "./api";
-import { Song } from "./models";
+import { createEffect, createResource, createSignal, on } from "solid-js";
+import { Player, Song } from "./api";
 
-function getStore(player: Player) {
+export function getStore(player: Player) {
   const [setlists] = createResource(player.getSetlists);
   const [setlistName, setSetlistName] = createStorageSignal<string | null>(
     "setlistName",
@@ -32,7 +22,6 @@ function getStore(player: Player) {
     }
   );
   const [setlist] = createResource(setlistName, player.getSetlist);
-
   const [song, setSong] = createStorageSignal<Song | null>("song", null, {
     // @ts-ignore
     serializer: (value: string) => {
@@ -65,7 +54,7 @@ function getStore(player: Player) {
   );
 
   const [playing, setPlaying] = createSignal(false);
-  async function togglePlay() {
+  async function togglePlaying() {
     const song_ = song();
     if (!song_) return;
 
@@ -104,25 +93,10 @@ function getStore(player: Player) {
     setlist,
     song,
     setSong,
-    togglePlay,
+    togglePlaying,
     playing,
     toggleGuide,
     guideEnabled,
     resetPlayback,
   };
-}
-
-// @ts-ignore
-const StoreContext: Context<ReturnType<typeof getStore>> = createContext();
-export default function useStore() {
-  return useContext(StoreContext);
-}
-export function StoreProvider(props: ParentProps<{ player: Player }>) {
-  // eslint-disable-next-line solid/reactivity
-  const store = getStore(props.player);
-  return (
-    <StoreContext.Provider value={store}>
-      {props.children}
-    </StoreContext.Provider>
-  );
 }
