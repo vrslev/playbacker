@@ -5,6 +5,7 @@ import yaml
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from playbacker.playback import Playback
 from playbacker.player import Player
@@ -89,10 +90,18 @@ def _():
     player.reset()
 
 
+frontend = Path("src/playbacker/dist")
+is_prod = frontend.exists()
+if is_prod:
+    app.mount("/", StaticFiles(directory="src/playbacker/dist", html=True))
+
+
 def main():
+    reload_dirs = [str(base)] if is_prod else [".", str(base)]
+    reload_includes = ["*.yaml"] if is_prod else ["*.py", "*.yaml"]
     uvicorn.run(  # pyright: ignore[reportUnknownMemberType]
         app="playbacker.main:app",
         reload=True,
-        reload_dirs=[".", str(base)],
-        reload_includes=["*.py", "*.yaml"],
+        reload_dirs=reload_dirs,
+        reload_includes=reload_includes,
     )

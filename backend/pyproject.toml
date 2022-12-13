@@ -4,8 +4,9 @@ version = "0"
 description = "Live music performance playback"
 authors = ["Lev Vereshchagin <mail@vrslev.com>"]
 license = "MIT"
-readme = "../README.md"
-include = ["src/playbacker/py.typed"]
+# TODO: readme
+# readme = "../README.md"
+include = ["src/playbacker/dist/**/*"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
