@@ -34,9 +34,6 @@ jobs:
     defaults:
       run:
         working-directory: backend
-
-    # env:
-    #   POETRY_VIRTUALENVS_PATH: ~/.cache/pypoetry/virtualenvs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +43,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: /home/runner/.cache/pypoetry/virtualenvs
-          key: hashFiles('backend/poetry.lock')
+          key: backend-${{ hashFiles('backend/poetry.lock') }}
       - run: pip install -U poetry
       - run: poetry install
       - run: sudo apt-get install -y --no-install-recommends libsndfile-dev portaudio19-dev
