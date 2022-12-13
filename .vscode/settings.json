@@ -7,6 +7,5 @@
       "strings": true
     },
     "editor.inlineSuggest.enabled": true
-  },
-  "eslint.workingDirectories": ["frontend"]
+  }
 }

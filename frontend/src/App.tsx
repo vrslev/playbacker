@@ -38,9 +38,7 @@ function addKeyboardShortcuts(type: keyof WindowEventMap, map: KeyBindingMap) {
 
 function Shortcut(props: { name: string; value: string }) {
   const [hightlight, setHighlight] = createSignal(false);
-  // eslint-disable-next-line solid/reactivity
   addKeyboardShortcuts("keydown", { [props.value]: () => setHighlight(true) });
-  // eslint-disable-next-line solid/reactivity
   addKeyboardShortcuts("keyup", { [props.value]: () => setHighlight(false) });
 
   return (
