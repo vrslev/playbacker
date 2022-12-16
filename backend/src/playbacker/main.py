@@ -90,10 +90,11 @@ def _():
     player.reset()
 
 
-frontend = Path("src/playbacker/dist")
+frontend = Path(__file__).parent / "dist"
 is_prod = frontend.exists()
+
 if is_prod:
-    app.mount("/", StaticFiles(directory="src/playbacker/dist", html=True))
+    app.mount("/", StaticFiles(directory=frontend, html=True))
 
 
 def main():
