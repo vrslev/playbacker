@@ -20,13 +20,10 @@ base = Path("~/.config/playbacker").expanduser()
 device = "default"
 with (base / "config.yaml").open() as f:
     settings = load_settings(content=yaml.safe_load(f), device_name=device)
-with (base / "songs.yaml").open() as f:
-    songs = load_songs(content=yaml.safe_load(f))
+player = Player(Playback(settings))
 
 setlists_dir = base / "setlists"
 assert setlists_dir.exists()
-
-player = Player(Playback(settings))
 
 
 def prettify_setlist_stem(stem: str) -> str:
@@ -68,14 +65,19 @@ def _():
 @app.post("/getSetlist")
 def _(name: str) -> Setlist:
     map = {prettify_setlist_stem(f.stem): f for f in setlists_dir.glob("*.yaml")}
-    if path := map.get(name):
-        with path.open() as f:
-            try:
-                return load_setlist(name=name, content=yaml.safe_load(f), songs=songs)
-            except NoSongInStorageError as err:
-                raise HTTPException(404, err.message)
-    else:
+    if not (path := map.get(name)):
         raise HTTPException(404, "no setlist with this name")
+
+    with (base / "songs.yaml").open() as f:
+        songs = load_songs(content=yaml.safe_load(f))
+
+    with path.open() as f:
+        content = yaml.safe_load(f)
+
+    try:
+        return load_setlist(name=name, content=content, songs=songs)
+    except NoSongInStorageError as err:
+        raise HTTPException(404, err.message)
 
 
 @app.post("/togglePlaying")
@@ -120,4 +122,5 @@ def main():
         reload=True,
         reload_dirs=reload_dirs,
         reload_includes=reload_includes,
+        workers=1,
     )
