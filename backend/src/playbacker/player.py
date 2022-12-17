@@ -21,7 +21,6 @@ class Player:
             self.playback.resume()
         else:
             self.tempo = tempo
-            self.enable_guide()
             self.playback.start(tempo=tempo)
 
         self.playing = True
@@ -40,15 +39,18 @@ class Player:
         self.started = False
 
     def prepare_for_switch(self):
+        print(self.started)
         if self.started:
-            self.playback.pause()
-            self.enable_guide()
+            self.pause()
+            self.guide_enabled = True
 
-    def enable_guide(self) -> None:
-        self.playback.tracks.countdown.enabled = True
+    @property
+    def guide_enabled(self):
+        return self.playback.tracks.countdown.enabled
 
-    def disable_guide(self) -> None:
-        self.playback.tracks.countdown.enabled = False
+    @guide_enabled.setter
+    def guide_enabled(self, value: bool):
+        self.playback.tracks.countdown.enabled = value
 
     def time(self) -> float:
         if self.started and self.tempo:

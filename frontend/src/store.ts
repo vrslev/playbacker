@@ -1,6 +1,12 @@
 import { createStorageSignal } from "@solid-primitives/storage";
-import { createEffect, createResource, createSignal, on } from "solid-js";
-import { Player, Song } from "./api";
+import {
+  batch,
+  createEffect,
+  createResource,
+  createSignal,
+  on,
+} from "solid-js";
+import { Player, PlayerState, Song } from "./api";
 
 export function getStore(player: Player) {
   const [setlists] = createResource(player.getSetlists);
@@ -43,42 +49,41 @@ export function getStore(player: Player) {
   createEffect(on(setlistName, () => setSong(null), { defer: true }));
   createEffect(
     on(song, async () => {
-      await player.prepareForSwitch();
-      setPlaying(false);
-      setGuideEnabled(true);
+      const state = await player.prepareForSwitch();
+      updateState(state);
     })
   );
+
+  function updateState(state: PlayerState) {
+    batch(() => {
+      setPlaying(state.playing);
+      setGuideEnabled(state.guide_enabled);
+    });
+  }
 
   const [playing, setPlaying] = createSignal(false);
   async function togglePlaying() {
     const song_ = song();
     if (!song_) return;
 
-    playing()
-      ? await player
-          .pause()
-          .then(() => setPlaying(false))
-          .catch(alert)
-      : await player
-          .play(song_.tempo)
-          .then(() => setPlaying(true))
-          .catch(alert);
+    const state = playing()
+      ? await player.pause()
+      : await player.play(song_.tempo);
+    updateState(state);
   }
 
   const [guideEnabled, setGuideEnabled] = createSignal(true);
   async function toggleGuide() {
-    guideEnabled()
-      ? await player
-          .disableGuide()
-          .then(() => setGuideEnabled(false))
-          .catch(alert)
-      : await player
-          .enableGuide()
-          .then(() => setGuideEnabled(true))
-          .catch(alert);
+    const state = guideEnabled()
+      ? await player.disableGuide()
+      : await player.enableGuide();
+    updateState(state);
   }
 
-  const resetPlayback = player.reset;
+  async function resetPlayback() {
+    const state = await player.reset();
+    updateState(state);
+  }
 
   return {
     setlists,

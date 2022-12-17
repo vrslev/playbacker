@@ -15,15 +15,20 @@ export interface Setlist {
   songs: Song[];
 }
 
+export interface PlayerState {
+  playing: boolean;
+  guide_enabled: boolean;
+}
+
 export interface Player {
   getSetlists(): Promise<string[]>;
   getSetlist(name: string): Promise<Setlist>;
-  play(tempo: Tempo): Promise<void>;
-  pause(): Promise<void>;
-  prepareForSwitch(): Promise<void>;
-  enableGuide(): Promise<void>;
-  disableGuide(): Promise<void>;
-  reset(): Promise<void>;
+  play(tempo: Tempo): Promise<PlayerState>;
+  pause(): Promise<PlayerState>;
+  prepareForSwitch(): Promise<PlayerState>;
+  enableGuide(): Promise<PlayerState>;
+  disableGuide(): Promise<PlayerState>;
+  reset(): Promise<PlayerState>;
 }
 
 export function apiPlayer(): Player {

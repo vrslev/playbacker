@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 from playbacker.playback import Playback
 from playbacker.player import Player
@@ -46,6 +47,15 @@ app = FastAPI(
 )
 
 
+class PlayerState(BaseModel):
+    playing: bool
+    guide_enabled: bool
+
+
+def make_state():
+    return PlayerState(playing=player.playing, guide_enabled=player.guide_enabled)
+
+
 @app.post("/getSetlists")
 def _():
     lst = list[str]()
@@ -71,31 +81,37 @@ def _(name: str) -> Setlist:
 @app.post("/play")
 def _(tempo: Tempo):
     player.play(tempo)
+    return make_state()
 
 
 @app.post("/pause")
 def _():
     player.pause()
+    return make_state()
 
 
 @app.post("/prepareForSwitch")
 def _():
     player.prepare_for_switch()
+    return make_state()
 
 
 @app.post("/enableGuide")
 def _():
-    player.enable_guide()
+    player.guide_enabled = True
+    return make_state()
 
 
 @app.post("/disableGuide")
 def _():
-    player.disable_guide()
+    player.guide_enabled = False
+    return make_state()
 
 
 @app.post("/reset")
 def _():
     player.reset()
+    return make_state()
 
 
 frontend = Path(__file__).parent / "dist"
