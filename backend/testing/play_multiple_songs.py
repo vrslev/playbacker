@@ -2,7 +2,7 @@ import time
 
 from shared import player, run, tempo
 
-from playbacker.tempo import Tempo
+from playbacker.core.tempo import Tempo
 
 
 def main():

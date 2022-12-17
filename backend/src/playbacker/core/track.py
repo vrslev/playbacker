@@ -2,9 +2,9 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from typing import Generic, Protocol, TypeVar
 
-from playbacker.audiofile import AudioArray, AudioFile
-from playbacker.stream import SoundGetter, Stream
-from playbacker.tempo import Tempo
+from playbacker.core.audiofile import AudioArray, AudioFile
+from playbacker.core.stream import SoundGetter, Stream
+from playbacker.core.tempo import Tempo
 
 
 @dataclass

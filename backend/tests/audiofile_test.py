@@ -7,7 +7,7 @@ import pytest
 import soundfile
 import soxr
 
-from playbacker.audiofile import AudioFile
+from playbacker.core.audiofile import AudioFile
 
 
 @pytest.fixture

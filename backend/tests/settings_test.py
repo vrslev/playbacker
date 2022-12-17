@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import sounddevice
 
-from playbacker.settings import (
+from playbacker.core.settings import (
     Settings,
     _ChannelMap,
     _convert_file_settings,

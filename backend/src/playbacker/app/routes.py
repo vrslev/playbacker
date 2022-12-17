@@ -7,10 +7,10 @@ from pydantic import BaseModel
 from sse_starlette import EventSourceResponse
 
 from playbacker.app.config import Config
-from playbacker.player import Player
-from playbacker.setlist import NoSongInStorageError, Setlist, load_setlist
-from playbacker.song import load_songs
-from playbacker.tempo import Tempo
+from playbacker.core.player import Player
+from playbacker.core.setlist import NoSongInStorageError, Setlist, load_setlist
+from playbacker.core.song import load_songs
+from playbacker.core.tempo import Tempo
 
 
 def prettify_setlist_stem(stem: str) -> str:

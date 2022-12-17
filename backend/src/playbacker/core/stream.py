@@ -6,7 +6,7 @@ from typing import Any, Protocol
 
 import sounddevice
 
-from playbacker.audiofile import AudioArray
+from playbacker.core.audiofile import AudioArray
 
 SoundGetter = Callable[[int], AudioArray | None]
 

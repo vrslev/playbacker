@@ -4,9 +4,9 @@ from typing import Any, TypedDict
 import sounddevice
 from pydantic import BaseModel, Field
 
-from playbacker.audiofile import AudioFile
-from playbacker.tracks.countdown import CountdownSounds
-from playbacker.tracks.metronome import MetronomeSounds
+from playbacker.core.audiofile import AudioFile
+from playbacker.core.tracks.countdown import CountdownSounds
+from playbacker.core.tracks.metronome import MetronomeSounds
 
 
 class _Sounds(BaseModel):

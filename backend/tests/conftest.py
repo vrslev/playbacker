@@ -5,9 +5,9 @@ from unittest.mock import Mock, PropertyMock
 
 import pytest
 
-from playbacker.stream import Stream
-from playbacker.tempo import Duration, Tempo, TimeSignature
-from playbacker.track import StreamBuilder
+from playbacker.core.stream import Stream
+from playbacker.core.tempo import Duration, Tempo, TimeSignature
+from playbacker.core.track import StreamBuilder
 
 TIME_SIGNATURES: tuple[TimeSignature, ...] = ("4/4", "6/8")
 DURATIONS: tuple[Duration, ...] = ("1/4", "1/8", "1/16")

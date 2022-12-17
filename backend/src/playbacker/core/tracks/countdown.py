@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Literal, NamedTuple
 
-from playbacker.audiofile import AudioArray, AudioFile
-from playbacker.tempo import TimeSignature
-from playbacker.track import SoundTrack
+from playbacker.core.audiofile import AudioArray, AudioFile
+from playbacker.core.tempo import TimeSignature
+from playbacker.core.track import SoundTrack
 
 
 class CountdownSounds(NamedTuple):

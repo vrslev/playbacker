@@ -3,10 +3,14 @@ from unittest.mock import PropertyMock
 
 import pytest
 
-from playbacker.audiofile import AudioFile
-from playbacker.tempo import Duration, Tempo, TimeSignature
-from playbacker.track import Shared, StreamBuilder
-from playbacker.tracks.metronome import MetronomeSounds, MetronomeTrack, get_instruction
+from playbacker.core.audiofile import AudioFile
+from playbacker.core.tempo import Duration, Tempo, TimeSignature
+from playbacker.core.track import Shared, StreamBuilder
+from playbacker.core.tracks.metronome import (
+    MetronomeSounds,
+    MetronomeTrack,
+    get_instruction,
+)
 from tests.conftest import DURATIONS, TIME_SIGNATURES, get_audiofile_mock
 
 

@@ -7,8 +7,8 @@ import numpy
 import pytest
 import sounddevice
 
-from playbacker.audiofile import AudioArray
-from playbacker.stream import (
+from playbacker.core.audiofile import AudioArray
+from playbacker.core.stream import (
     SounddeviceStream,
     allocate_data_to_channels,
     convert_channel_map_to_coreaudio_format,

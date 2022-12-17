@@ -1,8 +1,8 @@
 import pytest
 
-from playbacker.tempo import TimeSignature
-from playbacker.track import Shared, StreamBuilder
-from playbacker.tracks.countdown import (
+from playbacker.core.tempo import TimeSignature
+from playbacker.core.track import Shared, StreamBuilder
+from playbacker.core.tracks.countdown import (
     CountdownSounds,
     CountdownTrack,
     countdown_schemes,

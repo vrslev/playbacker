@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from playbacker.playback import Playback
-from playbacker.tempo import Tempo
+from playbacker.core.playback import Playback
+from playbacker.core.tempo import Tempo
 
 
 @dataclass(init=False)

@@ -3,13 +3,13 @@ from typing import Any, cast
 
 import pytest
 
-from playbacker.setlist import (
+from playbacker.core.setlist import (
     NoSongInStorageError,
     Setlist,
     _find_song_in_storage,
     load_setlist,
 )
-from playbacker.song import Song
+from playbacker.core.song import Song
 from tests.conftest import generate_tempo
 
 

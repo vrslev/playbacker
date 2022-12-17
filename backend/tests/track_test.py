@@ -5,7 +5,7 @@ from unittest.mock import Mock, PropertyMock
 import numpy
 import pytest
 
-from playbacker.track import Shared, SoundTrack, StreamBuilder, trim_audio_array
+from playbacker.core.track import Shared, SoundTrack, StreamBuilder, trim_audio_array
 
 
 @pytest.mark.parametrize(("data_length", "expected_length"), ((512, 256), (220, 200)))

@@ -10,9 +10,9 @@ from starlette.routing import BaseRoute
 
 from playbacker.app.config import Config
 from playbacker.app.routes import get_router
-from playbacker.playback import Playback
-from playbacker.player import Player
-from playbacker.settings import load_settings
+from playbacker.core.playback import Playback
+from playbacker.core.player import Player
+from playbacker.core.settings import load_settings
 
 
 def get_app(config: Config):

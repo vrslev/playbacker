@@ -2,8 +2,14 @@ from pathlib import Path
 
 import pytest
 
-from playbacker.song import Song, _convert_file_song, _FileSong, _TrackPaths, load_songs
-from playbacker.tempo import Tempo
+from playbacker.core.song import (
+    Song,
+    _convert_file_song,
+    _FileSong,
+    _TrackPaths,
+    load_songs,
+)
+from playbacker.core.tempo import Tempo
 
 
 def test_song_from_tempo(tempo: Tempo):

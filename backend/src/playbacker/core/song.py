@@ -3,7 +3,7 @@ from typing import Any, Self
 
 from pydantic import BaseModel, Field
 
-from playbacker.tempo import Tempo
+from playbacker.core.tempo import Tempo
 
 
 class _SongBase(BaseModel, frozen=True):

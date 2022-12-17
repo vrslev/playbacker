@@ -2,7 +2,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from playbacker.song import Song
+from playbacker.core.song import Song
 
 
 class Setlist(BaseModel):

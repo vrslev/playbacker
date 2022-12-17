@@ -6,7 +6,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from playbacker.clock import Clock
+from playbacker.core.clock import Clock
 
 
 @pytest.fixture

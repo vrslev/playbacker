@@ -3,13 +3,13 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Generic, NamedTuple, Protocol, TypeVar
 
-from playbacker.clock import Clock
-from playbacker.settings import Settings
-from playbacker.stream import SounddeviceStream
-from playbacker.tempo import Tempo
-from playbacker.track import Shared, StreamBuilder, Track
-from playbacker.tracks.countdown import CountdownTrack
-from playbacker.tracks.metronome import MetronomeTrack
+from playbacker.core.clock import Clock
+from playbacker.core.settings import Settings
+from playbacker.core.stream import SounddeviceStream
+from playbacker.core.tempo import Tempo
+from playbacker.core.track import Shared, StreamBuilder, Track
+from playbacker.core.tracks.countdown import CountdownTrack
+from playbacker.core.tracks.metronome import MetronomeTrack
 
 _Tracks = TypeVar("_Tracks", bound=Sequence[Track])
 

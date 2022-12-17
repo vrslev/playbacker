@@ -3,10 +3,10 @@ from pathlib import Path
 
 import yaml
 
-from playbacker.playback import Playback
-from playbacker.player import Player
-from playbacker.settings import load_settings
-from playbacker.tempo import Tempo
+from playbacker.core.playback import Playback
+from playbacker.core.player import Player
+from playbacker.core.settings import load_settings
+from playbacker.core.tempo import Tempo
 
 with (Path(__file__).parent.parent / "example" / "config.yaml").open() as f:
     settings = load_settings(content=yaml.safe_load(f), device_name="default")
