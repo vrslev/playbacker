@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Self
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -14,10 +14,6 @@ class _SongBase(BaseModel, frozen=True):
 class Song(_SongBase, frozen=True):
     name: str
 
-    @classmethod
-    def from_tempo(cls, tempo: Tempo) -> Self:
-        return Song(artist=None, name="Custom song", tempo=tempo)
-
 
 class _TrackPaths(BaseModel):
     multitrack: Path | None = None
@@ -28,16 +24,16 @@ class _FileSong(_SongBase, frozen=True):
     tracks: _TrackPaths = Field(default_factory=_TrackPaths)
 
 
+class _FileSongs(BaseModel):
+    __root__: dict[str, _FileSong]
+
+
 def _convert_file_song(name: str, song: _FileSong) -> Song:
     return Song(
         name=name,
         artist=song.artist,
         tempo=song.tempo,
     )
-
-
-class _FileSongs(BaseModel):
-    __root__: dict[str, _FileSong]
 
 
 def load_songs(content: Any) -> list[Song]:

@@ -9,23 +9,6 @@ class Setlist(BaseModel):
     name: str
     songs: list[Song]
 
-    def _get_song_idx(self, song: Song) -> int:
-        try:
-            return self.songs.index(song)
-        except ValueError:
-            return -1
-
-    def previous(self, song: Song) -> Song | None:
-        idx = self._get_song_idx(song)
-        return self.songs[idx - 1]
-
-    def next(self, song: Song) -> Song:
-        idx = self._get_song_idx(song)
-        try:
-            return self.songs[idx + 1]
-        except IndexError:
-            return self.songs[0]
-
 
 class NoSongInStorageError(Exception):
     message: str

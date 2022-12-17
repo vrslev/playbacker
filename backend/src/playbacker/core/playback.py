@@ -84,7 +84,7 @@ class Playback(BasePlayback[DefaultTracks]):
     settings: Settings = field(repr=False)
 
     def get_tracks(self) -> DefaultTracks:
-        def builder(channel_map: list[int]) -> StreamBuilder:
+        def create_builder(channel_map: list[int]) -> StreamBuilder:
             return lambda g: SounddeviceStream(
                 sound_getter=g,
                 sample_rate=self.settings.sample_rate,
@@ -99,12 +99,12 @@ class Playback(BasePlayback[DefaultTracks]):
             metronome=MetronomeTrack(
                 shared=self.shared,
                 sounds=self.settings.sounds.metronome,
-                stream_builder=builder(map.metronome),
+                stream_builder=create_builder(map.metronome),
             ),
             countdown=CountdownTrack(
                 shared=self.shared,
                 sounds=self.settings.sounds.countdown,
-                stream_builder=builder(map.guide),
+                stream_builder=create_builder(map.guide),
             ),
         )
 

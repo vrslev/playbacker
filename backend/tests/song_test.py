@@ -12,10 +12,6 @@ from playbacker.core.song import (
 from playbacker.core.tempo import Tempo
 
 
-def test_song_from_tempo(tempo: Tempo):
-    assert Song.from_tempo(tempo).tempo == tempo
-
-
 @pytest.fixture
 def file_song(tempo: Tempo):
     return _FileSong(

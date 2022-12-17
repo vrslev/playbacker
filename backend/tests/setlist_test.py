@@ -1,5 +1,4 @@
 import uuid
-from typing import Any, cast
 
 import pytest
 
@@ -21,24 +20,6 @@ def gen_song():
 def setlist():
     songs = [gen_song() for _ in range(10)]
     return Setlist(name="", songs=songs)
-
-
-def test_get_song_idx(setlist: Setlist):
-    assert setlist._get_song_idx(cast(Any, None)) == -1
-
-    idx = len(setlist.songs) - 1
-    assert setlist._get_song_idx(setlist.songs[idx]) == idx
-
-
-def test_previous(setlist: Setlist):
-    assert setlist.previous(setlist.songs[5]) == setlist.songs[4]
-    assert setlist.previous(cast(Any, None)) == setlist.songs[8]
-
-
-def test_next(setlist: Setlist):
-    assert setlist.next(setlist.songs[5]) == setlist.songs[6]
-    assert setlist.next(cast(Any, None)) == setlist.songs[0]
-    assert setlist.next(setlist.songs[-1]) == setlist.songs[0]
 
 
 def test_find_song_in_storage():

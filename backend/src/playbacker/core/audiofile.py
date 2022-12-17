@@ -10,24 +10,6 @@ import soxr
 AudioArray = numpy.ndarray[Any, numpy.dtype[Any]]
 
 
-def read_file(path: Path, sample_rate: int) -> AudioArray:
-    """Read audio file and convert to required sample rate."""
-    data, in_rate = cast(
-        tuple[AudioArray, int],
-        soundfile.read(path),  # pyright: ignore[reportUnknownMemberType]
-    )
-
-    if in_rate == sample_rate:
-        return data
-
-    return cast(
-        AudioArray,
-        soxr.resample(  # pyright: ignore[reportUnknownMemberType]
-            data, in_rate, sample_rate
-        ),
-    )
-
-
 @dataclass
 class AudioFile:
     path: Path
@@ -35,4 +17,18 @@ class AudioFile:
 
     @cached_property
     def data(self) -> AudioArray:
-        return read_file(self.path, self.sample_rate)
+        """Read audio file and convert to required sample rate."""
+        data, in_rate = cast(
+            tuple[AudioArray, int],
+            soundfile.read(self.path),  # pyright: ignore[reportUnknownMemberType]
+        )
+
+        if in_rate == self.sample_rate:
+            return data
+
+        return cast(
+            AudioArray,
+            soxr.resample(  # pyright: ignore[reportUnknownMemberType]
+                data, in_rate, self.sample_rate
+            ),
+        )
