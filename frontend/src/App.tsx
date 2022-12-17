@@ -20,11 +20,9 @@ function Placeholder(props: { text: string }) {
 
 function Detail(props: { name: string; param: string }) {
   return (
-    <div class="w-max space-x-2 rounded-lg bg-gray-100 p-2 text-sm">
-      <span>{props.name}</span>
-      <span class="rounded-lg bg-gray-200 p-1 text-sm">
-        <span>{props.param}</span>
-      </span>
+    <div class="h-15 flex w-40 basis-1/4 flex-col place-items-center items-center rounded-lg bg-gray-100 p-3 text-center text-sm">
+      <span class="text-2xl font-bold">{props.param}</span>
+      <span class=" text-xs  font-bold uppercase">{props.name}</span>
     </div>
   );
 }
@@ -161,24 +159,30 @@ export default function App() {
         >
           {(song) => (
             <>
-              <div class="m-16 grid flex-grow flex-wrap place-content-baseline">
+              <div class="m-16 mt-20 grid flex-grow flex-wrap place-content-baseline">
                 <div class="text-8xl font-bold">{song.name}</div>
                 <div class="my-2 text-6xl">{song.artist}</div>
-                <div class="my-5 flex max-w-sm flex-wrap gap-2">
+                <div class="my-5 flex flex-wrap gap-2">
                   <Detail name="Tempo" param={`${song.tempo.bpm}`} />
                   <Detail
                     name="Time Signature"
                     param={song.tempo.time_signature}
                   />
                   <Detail name="Duration" param={song.tempo.duration} />
-                  <Detail name="Playing" param={`${playing()}`} />
-                  <Detail name="Guide Enabled" param={`${guideEnabled()}`} />
+                  <Detail
+                    name="Status"
+                    param={`${playing() ? "Playing" : "Paused"}`}
+                  />
+                  <Detail
+                    name="Guide"
+                    param={`${guideEnabled() ? "Enabled" : "Disabled"}`}
+                  />
                 </div>
               </div>
               <hr />
               <div class="my-5 mx-16 flex flex-wrap gap-2">
                 <Shortcut
-                  name="Play"
+                  name="Play/Pause"
                   prettyValue="Space"
                   keys={["Space"]}
                   action={async (event) => {
@@ -193,19 +197,19 @@ export default function App() {
                   action={resetPlayback}
                 />
                 <Shortcut
-                  name="Toggle guide"
+                  name="Toggle Guide"
                   prettyValue="G"
                   keys={["g", "п"]}
                   action={toggleGuide}
                 />
                 <Shortcut
-                  name="Previous song"
+                  name="Previous Song"
                   prettyValue="←"
                   keys={["ArrowLeft"]}
                   action={previousSong}
                 />
                 <Shortcut
-                  name="Next song"
+                  name="Next Song"
                   prettyValue="→"
                   keys={["ArrowRight"]}
                   action={nextSong}
