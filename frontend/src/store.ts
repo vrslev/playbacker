@@ -8,6 +8,21 @@ import {
 } from "solid-js";
 import { makeUrl, Player, PlayerState, Song } from "./api";
 
+function getPreviousSong(
+  songs: Song[],
+  current: Song | null
+): Song | undefined {
+  if (!current) return;
+  const index = songs.indexOf(current);
+  return songs.at(index - 1);
+}
+
+function getNextSong(songs: Song[], current: Song | null): Song {
+  if (!current) return songs[0];
+  const index = songs.indexOf(current);
+  return songs.at(index + 1) || songs[0];
+}
+
 export function getStore(player: Player) {
   const [setlists, { refetch: refetchSetlists }] = createResource(
     player.getSetlists
@@ -85,6 +100,18 @@ export function getStore(player: Player) {
     setlistSource.addEventListener("message", () => refetchSetlist(), false);
   });
 
+  function previousSong() {
+    const songs = setlist()?.songs;
+    if (songs) {
+      const previous = getPreviousSong(songs, song());
+      if (previous) setSong(previous);
+    }
+  }
+  function nextSong() {
+    const songs = setlist()?.songs;
+    if (songs) setSong(getNextSong(songs, song()));
+  }
+
   return {
     setlists,
     setlistName,
@@ -97,5 +124,7 @@ export function getStore(player: Player) {
     toggleGuide,
     guideEnabled,
     resetPlayback,
+    previousSong,
+    nextSong,
   };
 }

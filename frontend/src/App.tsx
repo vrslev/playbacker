@@ -37,7 +37,7 @@ function addKeyboardShortcuts(type: keyof WindowEventMap, map: KeyBindingMap) {
   );
 }
 
-function Shortcut(props: { name: string; value: string }) {
+function Shortcut(props: { name: string; prettyValue: string; value: string }) {
   const [hightlight, setHighlight] = createSignal(false);
   addKeyboardShortcuts("keydown", { [props.value]: () => setHighlight(true) });
   addKeyboardShortcuts("keyup", { [props.value]: () => setHighlight(false) });
@@ -50,10 +50,10 @@ function Shortcut(props: { name: string; value: string }) {
     >
       <span
         class={`rounded-lg ${
-          hightlight() ? "bg-gray-400" : "bg-gray-200"
+          hightlight() ? "bg-gray-300" : "bg-gray-200"
         } p-1 text-sm`}
       >
-        <span>{props.value}</span>
+        <span>{props.prettyValue}</span>
       </span>
       <span>{props.name}</span>
     </div>
@@ -73,6 +73,8 @@ export default function App() {
     toggleGuide,
     guideEnabled,
     resetPlayback,
+    previousSong,
+    nextSong,
   } = getStore(apiPlayer());
 
   addKeyboardShortcuts("keyup", {
@@ -82,12 +84,14 @@ export default function App() {
     },
     r: resetPlayback,
     g: toggleGuide,
+    ArrowLeft: previousSong,
+    ArrowRight: nextSong,
   });
 
   const setlistSelected = createSelector(setlistName);
   const songSelected = createSelector(() => song()?.name);
 
-  onError(alert);
+  // onError(alert);
 
   return (
     <div class="App">
@@ -116,7 +120,9 @@ export default function App() {
         >
           {(song) => (
             <div
-              class="group flex hover:bg-gray-50"
+              class={`group flex hover:bg-gray-50 ${
+                songSelected(song.name) ? "bg-gray-50" : ""
+              }`}
               onClick={() => setSong(song)}
             >
               <div
@@ -164,9 +170,15 @@ export default function App() {
               </div>
               <hr />
               <div class="my-5 mx-16 flex flex-wrap gap-2">
-                <Shortcut name="Play" value="Space" />
-                <Shortcut name="Reset" value="R" />
-                <Shortcut name="Toggle guide" value="G" />
+                <Shortcut name="Play" prettyValue="Space" value="Space" />
+                <Shortcut name="Reset" prettyValue="R" value="R" />
+                <Shortcut name="Toggle guide" prettyValue="G" value="G" />
+                <Shortcut
+                  name="Previous song"
+                  prettyValue="←"
+                  value="ArrowLeft"
+                />
+                <Shortcut name="Next song" prettyValue="→" value="ArrowRight" />
               </div>
             </>
           )}
