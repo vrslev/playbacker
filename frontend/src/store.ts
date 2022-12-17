@@ -46,8 +46,9 @@ export function getStore(player: Player) {
   createEffect(
     on(setlist, (setlist) => {
       const song_ = song();
-      if (setlist) {
-        if (!song_ || !setlist.songs.includes(song_)) setSong(setlist.songs[0]);
+      if (setlist && setlist.songs) {
+        const match = setlist.songs.find((value) => value.name == song_?.name);
+        if (!match) setSong(setlist.songs[0]);
       }
     })
   );
