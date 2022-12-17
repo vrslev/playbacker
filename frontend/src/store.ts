@@ -65,9 +65,7 @@ export function getStore(player: Player) {
           .catch(alert)
       : await player
           .play(song_.tempo)
-          .then(() => {
-            setPlaying(true);
-          })
+          .then(() => setPlaying(true))
           .catch(alert);
   }
 

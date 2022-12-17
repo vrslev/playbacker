@@ -11,7 +11,7 @@ class Player:
     playback: Playback
     tempo: Tempo | None = None
     started: bool = False
-    paused: bool = False
+    playing: bool = False
 
     def __init__(self, playback: Playback) -> None:
         self.playback = playback
@@ -24,12 +24,12 @@ class Player:
             self.enable_guide()
             self.playback.start(tempo=tempo)
 
-        self.paused = False
+        self.playing = True
         self.started = True
 
     def pause(self) -> None:
         self.playback.pause()
-        self.paused = True
+        self.playing = False
 
     def reset(self) -> None:
         self.pause()

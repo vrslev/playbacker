@@ -14,17 +14,6 @@ from playbacker.settings import load_settings
 from playbacker.song import load_songs
 from playbacker.tempo import Tempo
 
-app = FastAPI(
-    middleware=[
-        Middleware(
-            CORSMiddleware,
-            allow_origins=["*"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
-    ]
-)
 base = Path("~/.config/playbacker").expanduser()
 
 device = "default"
@@ -41,6 +30,20 @@ player = Player(Playback(settings))
 
 def prettify_setlist_stem(stem: str) -> str:
     return " ".join(w.capitalize() for w in stem.split())
+
+
+app = FastAPI(
+    middleware=[
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    ],
+    on_shutdown=[lambda: player.stop()],
+)
 
 
 @app.post("/getSetlists")
