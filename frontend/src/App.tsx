@@ -3,7 +3,6 @@ import {
   createSignal,
   For,
   onCleanup,
-  onError,
   onMount,
   Show,
 } from "solid-js";
@@ -31,26 +30,47 @@ function Detail(props: { name: string; param: string }) {
 }
 
 function addKeyboardShortcuts(type: keyof WindowEventMap, map: KeyBindingMap) {
-  onMount(() => window.addEventListener(type, createKeybindingsHandler(map)));
-  onCleanup(() =>
-    window.removeEventListener(type, createKeybindingsHandler(map))
-  );
+  const handler = createKeybindingsHandler(map);
+  onMount(() => window.addEventListener(type, handler));
+  onCleanup(() => window.removeEventListener(type, handler));
 }
 
-function Shortcut(props: { name: string; prettyValue: string; value: string }) {
-  const [hightlight, setHighlight] = createSignal(false);
-  addKeyboardShortcuts("keydown", { [props.value]: () => setHighlight(true) });
-  addKeyboardShortcuts("keyup", { [props.value]: () => setHighlight(false) });
+function Shortcut(props: {
+  name: string;
+  prettyValue: string;
+  keys: string[];
+  action: (event: KeyboardEvent) => void;
+}) {
+  const [highlight, setHighlight] = createSignal(false);
+
+  addKeyboardShortcuts(
+    "keydown",
+    Object.fromEntries(
+      props.keys.map((key) => [
+        key,
+        (event: KeyboardEvent) => {
+          props.action(event);
+          setHighlight(true);
+        },
+      ])
+    )
+  );
+  addKeyboardShortcuts(
+    "keyup",
+    Object.fromEntries(
+      props.keys.map((key) => [key, () => setHighlight(false)])
+    )
+  );
 
   return (
     <div
       class={`w-max space-x-2 rounded-lg p-2 font-mono text-sm ${
-        hightlight() ? "bg-gray-300" : "bg-gray-100"
+        highlight() ? "bg-gray-300" : "bg-gray-100"
       }`}
     >
       <span
         class={`rounded-lg ${
-          hightlight() ? "bg-gray-300" : "bg-gray-200"
+          highlight() ? "bg-gray-300" : "bg-gray-200"
         } p-1 text-sm`}
       >
         <span>{props.prettyValue}</span>
@@ -77,21 +97,8 @@ export default function App() {
     nextSong,
   } = getStore(apiPlayer());
 
-  addKeyboardShortcuts("keyup", {
-    Space: async (event) => {
-      event.preventDefault();
-      await togglePlaying();
-    },
-    r: resetPlayback,
-    g: toggleGuide,
-    ArrowLeft: previousSong,
-    ArrowRight: nextSong,
-  });
-
   const setlistSelected = createSelector(setlistName);
   const songSelected = createSelector(() => song()?.name);
-
-  // onError(alert);
 
   return (
     <div class="App">
@@ -170,15 +177,39 @@ export default function App() {
               </div>
               <hr />
               <div class="my-5 mx-16 flex flex-wrap gap-2">
-                <Shortcut name="Play" prettyValue="Space" value="Space" />
-                <Shortcut name="Reset" prettyValue="R" value="R" />
-                <Shortcut name="Toggle guide" prettyValue="G" value="G" />
+                <Shortcut
+                  name="Play"
+                  prettyValue="Space"
+                  keys={["Space"]}
+                  action={async (event) => {
+                    event.preventDefault();
+                    await togglePlaying();
+                  }}
+                />
+                <Shortcut
+                  name="Reset"
+                  prettyValue="R"
+                  keys={["r", "к"]}
+                  action={resetPlayback}
+                />
+                <Shortcut
+                  name="Toggle guide"
+                  prettyValue="G"
+                  keys={["g", "п"]}
+                  action={toggleGuide}
+                />
                 <Shortcut
                   name="Previous song"
                   prettyValue="←"
-                  value="ArrowLeft"
+                  keys={["ArrowLeft"]}
+                  action={previousSong}
                 />
-                <Shortcut name="Next song" prettyValue="→" value="ArrowRight" />
+                <Shortcut
+                  name="Next song"
+                  prettyValue="→"
+                  keys={["ArrowRight"]}
+                  action={nextSong}
+                />
               </div>
             </>
           )}
