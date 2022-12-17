@@ -42,15 +42,11 @@ export function getStore(player: Player) {
   });
   createEffect(on(setlistName, () => setSong(null), { defer: true }));
   createEffect(
-    on(
-      song,
-      async () => {
-        await player.reset();
-        setPlaying(false);
-        setGuideEnabled(true);
-      },
-      { defer: true }
-    )
+    on(song, async () => {
+      await player.prepareForSwitch();
+      setPlaying(false);
+      setGuideEnabled(true);
+    })
   );
 
   const [playing, setPlaying] = createSignal(false);

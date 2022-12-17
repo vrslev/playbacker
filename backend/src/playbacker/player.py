@@ -39,6 +39,11 @@ class Player:
         self.playback.destroy()
         self.started = False
 
+    def prepare_for_switch(self):
+        if self.started:
+            self.playback.pause()
+            self.enable_guide()
+
     def enable_guide(self) -> None:
         self.playback.tracks.countdown.enabled = True
 

@@ -78,6 +78,11 @@ def _():
     player.pause()
 
 
+@app.post("/prepareForSwitch")
+def _():
+    player.prepare_for_switch()
+
+
 @app.post("/enableGuide")
 def _():
     player.enable_guide()

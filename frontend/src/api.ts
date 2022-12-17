@@ -20,6 +20,7 @@ export interface Player {
   getSetlist(name: string): Promise<Setlist>;
   play(tempo: Tempo): Promise<void>;
   pause(): Promise<void>;
+  prepareForSwitch(): Promise<void>;
   enableGuide(): Promise<void>;
   disableGuide(): Promise<void>;
   reset(): Promise<void>;
@@ -42,6 +43,7 @@ export function apiPlayer(): Player {
     pause: () => e("/pause"),
     enableGuide: () => e("/enableGuide"),
     disableGuide: () => e("/disableGuide"),
+    prepareForSwitch: () => e("/prepareForSwitch"),
     reset: () => e("/reset"),
   };
 }
