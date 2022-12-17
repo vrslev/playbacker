@@ -808,6 +808,21 @@ docs = ["linkify-it-py", "myst-parser", "sphinx", "sphinx-book-theme"]
 test = ["pytest"]
 
 [[package]]
+name = "sse-starlette"
+version = "1.2.1"
+description = "\"SSE plugin for Starlette\""
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "sse-starlette-1.2.1.tar.gz", hash = "sha256:52760a16ed6380be53a2acca9173de17442f4165716f93679182e82ddd5c8a01"},
+    {file = "sse_starlette-1.2.1-py3-none-any.whl", hash = "sha256:22116035906cb332ed3c5cb2d495af58fd55350de20866ecdc247db7fd69f2ef"},
+]
+
+[package.dependencies]
+starlette = "*"
+
+[[package]]
 name = "starlette"
 version = "0.22.0"
 description = "The little ASGI library that shines."
@@ -1054,4 +1069,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "45f7dd5f3195a039e9acb1d6506c0d8c53e2908dd08e710c552d720edda6fc52"
+content-hash = "f7a1e3d0a83fbb05272b7dbea1bc1198842edbf84d2a2a52ca319f29d0fe6246"

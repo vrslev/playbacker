@@ -3,6 +3,7 @@ import {
   createSignal,
   For,
   onCleanup,
+  onError,
   onMount,
   Show,
 } from "solid-js";
@@ -85,6 +86,8 @@ export default function App() {
 
   const setlistSelected = createSelector(setlistName);
   const songSelected = createSelector(() => song()?.name);
+
+  onError(alert);
 
   return (
     <div class="App">

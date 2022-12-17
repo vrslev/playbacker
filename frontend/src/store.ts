@@ -6,10 +6,12 @@ import {
   createSignal,
   on,
 } from "solid-js";
-import { Player, PlayerState, Song } from "./api";
+import { makeUrl, Player, PlayerState, Song } from "./api";
 
 export function getStore(player: Player) {
-  const [setlists] = createResource(player.getSetlists);
+  const [setlists, { refetch: refetchSetlists }] = createResource(
+    player.getSetlists
+  );
 
   function allowSetlistChange(prev: string | null, next: string | null) {
     if (playing() && prev && next && prev !== next)
@@ -21,7 +23,10 @@ export function getStore(player: Player) {
     null,
     { equals: (prev, next) => !allowSetlistChange(prev, next) }
   );
-  const [setlist] = createResource(setlistName, player.getSetlist);
+  const [setlist, { refetch: refetchSetlist }] = createResource(
+    setlistName,
+    player.getSetlist
+  );
   createEffect(on(setlistName, () => setSong(null), { defer: true }));
 
   const [song, setSong] = createStorageSignal<Song | null>("song", null, {
@@ -66,6 +71,19 @@ export function getStore(player: Player) {
   const toggleGuide = async () =>
     updateState(await player.toggleGuideEnabled());
   const resetPlayback = async () => updateState(await player.reset());
+
+  const setlistsSource = new EventSource(makeUrl("/watchSetlists"));
+  setlistsSource.addEventListener("message", () => refetchSetlists(), false);
+
+  let setlistSource: EventSource | undefined;
+  createEffect(() => {
+    const setlistName_ = setlistName();
+    if (setlistSource) setlistSource.close();
+    setlistSource = new EventSource(
+      makeUrl(`/watchSetlist?name=${setlistName_}`)
+    );
+    setlistSource.addEventListener("message", () => refetchSetlist(), false);
+  });
 
   return {
     setlists,

@@ -1,12 +1,14 @@
 from pathlib import Path
 
 import uvicorn
+import watchfiles
 import yaml
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from sse_starlette import EventSourceResponse
 
 from playbacker.playback import Playback
 from playbacker.player import Player
@@ -24,10 +26,18 @@ player = Player(Playback(settings))
 
 setlists_dir = base / "setlists"
 assert setlists_dir.exists()
+songs_path = base / "songs.yaml"
 
 
 def prettify_setlist_stem(stem: str) -> str:
     return " ".join(w.capitalize() for w in stem.split())
+
+
+def get_setlist_path_from_pretty_name(name: str) -> Path:
+    map = {prettify_setlist_stem(f.stem): f for f in setlists_dir.glob("*.yaml")}
+    if path := map.get(name):
+        return path
+    raise HTTPException(404, "no setlist with this name")
 
 
 app = FastAPI(
@@ -64,11 +74,9 @@ def _():
 
 @app.post("/getSetlist")
 def _(name: str) -> Setlist:
-    map = {prettify_setlist_stem(f.stem): f for f in setlists_dir.glob("*.yaml")}
-    if not (path := map.get(name)):
-        raise HTTPException(404, "no setlist with this name")
+    path = get_setlist_path_from_pretty_name(name)
 
-    with (base / "songs.yaml").open() as f:
+    with (songs_path).open() as f:
         songs = load_songs(content=yaml.safe_load(f))
 
     with path.open() as f:
@@ -107,6 +115,30 @@ def _():
     return make_state()
 
 
+@app.get("/watchSetlists")
+def _():
+    async def watch():
+        async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
+            setlists_dir
+        ):
+            yield True
+
+    return EventSourceResponse(watch())
+
+
+@app.get("/watchSetlist")
+def _(name: str) -> EventSourceResponse:
+    path = get_setlist_path_from_pretty_name(name)
+
+    async def watch():
+        async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
+            path, songs_path
+        ):
+            yield True
+
+    return EventSourceResponse(watch())
+
+
 frontend = Path(__file__).parent / "dist"
 is_prod = frontend.exists()
 
@@ -115,12 +147,6 @@ if is_prod:
 
 
 def main():
-    reload_dirs = [str(base)] if is_prod else [".", str(base)]
-    reload_includes = ["*.yaml"] if is_prod else ["*.py", "*.yaml"]
     uvicorn.run(  # pyright: ignore[reportUnknownMemberType]
-        app="playbacker.main:app",
-        reload=True,
-        reload_dirs=reload_dirs,
-        reload_includes=reload_includes,
-        workers=1,
+        app="playbacker.main:app", reload=not is_prod
     )

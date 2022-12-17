@@ -39,7 +39,6 @@ class Player:
         self.started = False
 
     def prepare_for_switch(self):
-        print(self.started)
         if self.started:
             self.pause()
             self.guide_enabled = True

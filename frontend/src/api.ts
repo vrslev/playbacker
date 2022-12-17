@@ -29,10 +29,11 @@ export interface Player {
   reset(): Promise<PlayerState>;
 }
 
+export const makeUrl = (path: string) => `http://127.0.0.1:8000${path}`;
+
 export function apiPlayer(): Player {
-  const url = (path: string) => `http://127.0.0.1:8000${path}`;
   const e = async (path: string, init?: RequestInit) =>
-    (await fetch(url(path), { method: "POST", ...init })).json();
+    (await fetch(makeUrl(path), { method: "POST", ...init })).json();
 
   return {
     getSetlists: () => e("/getSetlists"),
