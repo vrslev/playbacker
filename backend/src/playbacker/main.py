@@ -78,33 +78,24 @@ def _(name: str) -> Setlist:
         raise HTTPException(404, "no setlist with this name")
 
 
-@app.post("/play")
+@app.post("/togglePlaying")
 def _(tempo: Tempo):
-    player.play(tempo)
+    if player.playing:
+        player.pause()
+    else:
+        player.play(tempo)
     return make_state()
 
 
-@app.post("/pause")
+@app.post("/toggleGuideEnabled")
 def _():
-    player.pause()
+    player.guide_enabled = not player.guide_enabled
     return make_state()
 
 
 @app.post("/prepareForSwitch")
 def _():
     player.prepare_for_switch()
-    return make_state()
-
-
-@app.post("/enableGuide")
-def _():
-    player.guide_enabled = True
-    return make_state()
-
-
-@app.post("/disableGuide")
-def _():
-    player.guide_enabled = False
     return make_state()
 
 

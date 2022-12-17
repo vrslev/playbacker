@@ -23,11 +23,9 @@ export interface PlayerState {
 export interface Player {
   getSetlists(): Promise<string[]>;
   getSetlist(name: string): Promise<Setlist>;
-  play(tempo: Tempo): Promise<PlayerState>;
-  pause(): Promise<PlayerState>;
+  togglePlaying(tempo: Tempo): Promise<PlayerState>;
+  toggleGuideEnabled(): Promise<PlayerState>;
   prepareForSwitch(): Promise<PlayerState>;
-  enableGuide(): Promise<PlayerState>;
-  disableGuide(): Promise<PlayerState>;
   reset(): Promise<PlayerState>;
 }
 
@@ -40,14 +38,12 @@ export function apiPlayer(): Player {
     getSetlists: () => e("/getSetlists"),
     getSetlist: (name: string) =>
       e(`/getSetlist?${new URLSearchParams({ name })}`),
-    play: (tempo: Tempo) =>
-      e("/play", {
+    togglePlaying: (tempo: Tempo) =>
+      e("/togglePlaying", {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tempo),
       }),
-    pause: () => e("/pause"),
-    enableGuide: () => e("/enableGuide"),
-    disableGuide: () => e("/disableGuide"),
+    toggleGuideEnabled: () => e("/toggleGuideEnabled"),
     prepareForSwitch: () => e("/prepareForSwitch"),
     reset: () => e("/reset"),
   };
