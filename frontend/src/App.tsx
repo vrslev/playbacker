@@ -139,12 +139,15 @@ export default function App() {
                 <div class="text-sm">{song.artist}</div>
               </div>
               <div
-                class={`invisible place-self-center whitespace-nowrap pr-6 text-right text-sm group-hover:visible ${
-                  songSelected(song.name) ? "text-yellow-700" : "text-gray-500"
+                class={`invisible grid grid-cols-3 place-items-center divide-x whitespace-nowrap pr-6 text-sm group-hover:visible ${
+                  songSelected(song.name)
+                    ? "divide-yellow-700 text-yellow-700"
+                    : "divide-gray-500 text-gray-500"
                 }`}
               >
-                {/* TODO: pretty */}
-                {`${song.tempo.bpm} ${song.tempo.time_signature} ${song.tempo.duration}`}
+                <div class="px-3">{song.tempo.bpm}</div>
+                <div class="px-3">{song.tempo.time_signature}</div>
+                <div class="px-3">{song.tempo.duration}</div>
               </div>
             </div>
           )}
