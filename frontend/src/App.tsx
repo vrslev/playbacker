@@ -21,8 +21,8 @@ function Placeholder(props: { text: string }) {
 function Detail(props: { name: string; param: string }) {
   return (
     <div class="h-15 flex w-40 basis-1/4 flex-col place-items-center items-center rounded-lg bg-gray-100 p-3 text-center text-sm">
-      <span class="text-2xl font-bold">{props.param}</span>
-      <span class=" text-xs  font-bold uppercase">{props.name}</span>
+      <span class="text-2xl font-semibold">{props.param}</span>
+      <span class=" text-xs font-semibold uppercase">{props.name}</span>
     </div>
   );
 }
@@ -99,33 +99,31 @@ export default function App() {
   const songSelected = createSelector(() => song()?.name);
 
   return (
-    <div class="App">
-      <div class="h-screen w-full overflow-y-auto p-3">
-        <ul class="space-y-3 border-l-2 border-gray-100">
-          <For each={setlists()}>
-            {(setlist) => (
-              <li
-                class={`-ml-[2px] block break-all border-l-2 border-transparent pl-4 hover:transition-all ${
-                  setlistSelected(setlist)
-                    ? "border-yellow-600 text-yellow-600"
-                    : "text-gray-500 hover:border-black hover:text-black"
-                }`}
-                onClick={() => setSetlistName(setlist)}
-              >
-                {setlist}
-              </li>
-            )}
-          </For>
-        </ul>
-      </div>
-      <div class="h-screen w-full divide-y overflow-y-auto ring-1 ring-black/5">
+    <div class="App grid h-screen" style="grid-template-columns: 1fr 2fr 4fr;">
+      <ul class="overflow-y-scroll px-5">
+        <For each={setlists()}>
+          {(setlist) => (
+            <li
+              class={`-ml-[2px] block break-after-left border-l-2 border-gray-100 p-2 pl-4 first:mt-7 last:mb-7 hover:transition-all ${
+                setlistSelected(setlist)
+                  ? "border-yellow-600 text-yellow-600"
+                  : "text-gray-500 hover:border-black hover:text-black"
+              }`}
+              onClick={() => setSetlistName(setlist)}
+            >
+              {setlist}
+            </li>
+          )}
+        </For>
+      </ul>
+      <div class="overflow-y-scroll ring-1 ring-black/5">
         <For
           each={setlist()?.songs}
           fallback={<Placeholder text="Choose a setlist" />}
         >
           {(song) => (
             <div
-              class={`group flex hover:bg-gray-50 ${
+              class={`group flex border border-gray-100 first:mt-7 last:mb-7 hover:bg-gray-50 ${
                 songSelected(song.name) ? "bg-gray-50" : ""
               }`}
               onClick={() => setSong(song)}
@@ -145,13 +143,14 @@ export default function App() {
                   songSelected(song.name) ? "text-yellow-700" : "text-gray-500"
                 }`}
               >
+                {/* TODO: pretty */}
                 {`${song.tempo.bpm} ${song.tempo.time_signature} ${song.tempo.duration}`}
               </div>
             </div>
           )}
         </For>
       </div>
-      <div class="flex h-screen flex-col">
+      <div class="flex flex-col overflow-hidden">
         <Show
           when={song()}
           fallback={<Placeholder text="Choose a song" />}
@@ -159,10 +158,10 @@ export default function App() {
         >
           {(song) => (
             <>
-              <div class="m-16 mt-20 grid flex-grow flex-wrap place-content-baseline">
+              <div class="m-20 flex flex-1 flex-col">
                 <div class="text-8xl font-bold">{song.name}</div>
                 <div class="my-2 text-6xl">{song.artist}</div>
-                <div class="my-5 flex flex-wrap gap-2">
+                <div class="my-6 flex flex-wrap gap-2">
                   <Detail name="Tempo" param={`${song.tempo.bpm}`} />
                   <Detail
                     name="Time Signature"
@@ -179,41 +178,43 @@ export default function App() {
                   />
                 </div>
               </div>
-              <hr />
-              <div class="my-5 mx-16 flex flex-wrap gap-2">
-                <Shortcut
-                  name="Play/Pause"
-                  prettyValue="Space"
-                  keys={["Space"]}
-                  action={async (event) => {
-                    event.preventDefault();
-                    await togglePlaying();
-                  }}
-                />
-                <Shortcut
-                  name="Reset"
-                  prettyValue="R"
-                  keys={["r", "к"]}
-                  action={resetPlayback}
-                />
-                <Shortcut
-                  name="Toggle Guide"
-                  prettyValue="G"
-                  keys={["g", "п"]}
-                  action={toggleGuide}
-                />
-                <Shortcut
-                  name="Previous Song"
-                  prettyValue="←"
-                  keys={["ArrowLeft"]}
-                  action={previousSong}
-                />
-                <Shortcut
-                  name="Next Song"
-                  prettyValue="→"
-                  keys={["ArrowRight"]}
-                  action={nextSong}
-                />
+              <div class="mx-20 mb-10 mt-2 flex flex-col">
+                <hr class="w-full p-2" />
+                <div class="flex flex-wrap gap-2">
+                  <Shortcut
+                    name="Play/Pause"
+                    prettyValue="Space"
+                    keys={["Space"]}
+                    action={async (event) => {
+                      event.preventDefault();
+                      await togglePlaying();
+                    }}
+                  />
+                  <Shortcut
+                    name="Reset"
+                    prettyValue="R"
+                    keys={["r", "к"]}
+                    action={resetPlayback}
+                  />
+                  <Shortcut
+                    name="Toggle Guide"
+                    prettyValue="G"
+                    keys={["g", "п"]}
+                    action={toggleGuide}
+                  />
+                  <Shortcut
+                    name="Previous Song"
+                    prettyValue="←"
+                    keys={["ArrowLeft"]}
+                    action={previousSong}
+                  />
+                  <Shortcut
+                    name="Next Song"
+                    prettyValue="→"
+                    keys={["ArrowRight"]}
+                    action={nextSong}
+                  />
+                </div>
               </div>
             </>
           )}
