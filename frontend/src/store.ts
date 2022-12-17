@@ -38,11 +38,19 @@ export function getStore(player: Player) {
     null,
     { equals: (prev, next) => !allowSetlistChange(prev, next) }
   );
+
   const [setlist, { refetch: refetchSetlist }] = createResource(
     setlistName,
     player.getSetlist
   );
-  createEffect(on(setlistName, () => setSong(null), { defer: true }));
+  createEffect(
+    on(setlist, (setlist) => {
+      const song_ = song();
+      if (setlist) {
+        if (!song_ || !setlist.songs.includes(song_)) setSong(setlist.songs[0]);
+      }
+    })
+  );
 
   const [song, setSong] = createStorageSignal<Song | null>("song", null, {
     // @ts-ignore
