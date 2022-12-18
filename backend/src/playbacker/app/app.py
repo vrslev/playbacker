@@ -6,7 +6,7 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from playbacker.app.config import Config
+from playbacker.app.config import Config, get_config_file_path
 from playbacker.app.routes import get_router
 from playbacker.core.playback import Playback
 from playbacker.core.player import Player
@@ -14,7 +14,7 @@ from playbacker.core.settings import load_settings
 
 
 def get_app(config: Config):
-    with config.config_file_path.open() as f:
+    with get_config_file_path(config.config_dir_path).open() as f:
         content = yaml.safe_load(f)
     player = Player(Playback(load_settings(content=content, device_name=config.device)))
 

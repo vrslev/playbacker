@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from sse_starlette import EventSourceResponse
 
-from playbacker.app.config import Config
+from playbacker.app.config import Config, get_setlists_dir_path, get_songs_file_path
 from playbacker.core.player import Player
 from playbacker.core.setlist import NoSongInStorageError, Setlist, load_setlist
 from playbacker.core.song import load_songs
@@ -35,21 +35,22 @@ class PlayerState(BaseModel):
 
 def get_router(config: Config, player: Player):
     router = APIRouter()
+    setlists_dir_path = get_setlists_dir_path(config.config_dir_path)
+    songs_file_path = get_songs_file_path(config.config_dir_path)
 
     @router.post("/getSetlists")
     def _():
         stems = [
-            prettify_setlist_stem(f.stem)
-            for f in config.setlists_dir_path.glob("*.yaml")
+            prettify_setlist_stem(f.stem) for f in setlists_dir_path.glob("*.yaml")
         ]
         stems.sort(reverse=True)
         return stems
 
     @router.post("/getSetlist")
     def _(name: str) -> Setlist:
-        path = get_setlist_path_from_pretty_name(name, config.setlists_dir_path)
+        path = get_setlist_path_from_pretty_name(name, setlists_dir_path)
 
-        with config.songs_file_path.open() as f:
+        with songs_file_path.open() as f:
             songs = load_songs(content=yaml.safe_load(f))
 
         with path.open() as f:
@@ -87,7 +88,7 @@ def get_router(config: Config, player: Player):
     def _():
         async def watch():
             async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
-                config.setlists_dir_path
+                setlists_dir_path
             ):
                 yield True
 
@@ -95,11 +96,11 @@ def get_router(config: Config, player: Player):
 
     @router.get("/watchSetlist")
     def _(name: str) -> EventSourceResponse:
-        path = get_setlist_path_from_pretty_name(name, config.setlists_dir_path)
+        path = get_setlist_path_from_pretty_name(name, setlists_dir_path)
 
         async def watch():
             async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
-                path, config.songs_file_path
+                path, songs_file_path
             ):
                 yield True
 

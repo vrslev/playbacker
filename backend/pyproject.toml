@@ -34,7 +34,7 @@ requires = ["poetry-core>1.0.7"]          # 1.0.8 supports PEP 660 — editable
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-playbacker = "playbacker.main:main"
+playbacker = "playbacker.main:cli"
 
 [tool.poetry-version-plugin]
 source = "git-tag"
