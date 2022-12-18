@@ -6,8 +6,8 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from playbacker.app.config import Config, get_config_file_path
 from playbacker.app.routes import get_router
+from playbacker.config import Config, get_config_file_path
 from playbacker.core.playback import Playback
 from playbacker.core.player import Player
 from playbacker.core.settings import load_settings

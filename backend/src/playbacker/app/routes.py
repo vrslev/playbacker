@@ -6,15 +6,16 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from sse_starlette import EventSourceResponse
 
-from playbacker.app.config import Config, get_setlists_dir_path, get_songs_file_path
+from playbacker.config import Config, get_setlists_dir_path, get_songs_file_path
 from playbacker.core.player import Player
-from playbacker.core.setlist import NoSongInStorageError, Setlist, load_setlist
+from playbacker.core.setlist import (
+    NoSongInStorageError,
+    Setlist,
+    load_setlist,
+    prettify_setlist_stem,
+)
 from playbacker.core.song import load_songs
 from playbacker.core.tempo import Tempo
-
-
-def prettify_setlist_stem(stem: str) -> str:
-    return " ".join(w.capitalize() for w in stem.split())
 
 
 def get_setlist_path_from_pretty_name(name: str, setlists_dir_path: Path) -> Path:

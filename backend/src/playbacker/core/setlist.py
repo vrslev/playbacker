@@ -26,11 +26,15 @@ def _find_song_in_storage(name: str, storage: list[Song]):
     raise NoSongInStorageError(f'Song "{name}" is not present in storage')
 
 
-class _FileSetlist(BaseModel):
+class FileSetlist(BaseModel):
     __root__: list[str]
 
 
 def load_setlist(name: str, content: Any, songs: list[Song]) -> Setlist:
-    fsetlist = _FileSetlist(__root__=content)
+    fsetlist = FileSetlist(__root__=content)
     selected_songs = [_find_song_in_storage(n, songs) for n in fsetlist.__root__]
     return Setlist(name=name, songs=selected_songs)
+
+
+def prettify_setlist_stem(stem: str) -> str:
+    return " ".join(w.capitalize() for w in stem.split())
