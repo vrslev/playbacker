@@ -21,7 +21,7 @@ jobs:
           key: backend-${{ hashFiles('backend/poetry.lock') }}
       - run: |
           pip install -U poetry
-          poetry self add poetry-version-plugin
+          poetry self add "poetry-dynamic-versioning[plugin]"
       - run: cd backend && poetry install
       - uses: actions/setup-node@v3
         with:

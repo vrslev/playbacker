@@ -30,14 +30,18 @@ pytest-cov = "4.0.0"
 pyright = "1.1.285"
 
 [build-system]
-requires = ["poetry-core>1.0.7"]          # 1.0.8 supports PEP 660 — editable installs
-build-backend = "poetry.core.masonry.api"
+requires = [
+    "poetry-core>1.0.7",         # 1.0.8 supports PEP 660 — editable installs
+    "poetry-dynamic-versioning",
+]
+build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry.scripts]
 playbacker = "playbacker.main:cli"
 
-[tool.poetry-version-plugin]
-source = "git-tag"
+[tool.poetry-dynamic-versioning]
+enable = true
+format = "v{base}"
 
 [tool.black]
 target-version = ["py310"]
