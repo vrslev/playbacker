@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "playbacker"
+version = "0"
+description = "Live music performance playback"
+authors = ["Lev Vereshchagin <mail@vrslev.com>"]
+license = "MIT"
+# TODO: readme
+# readme = "../README.md"
+include = ["src/playbacker/dist/**/*"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sounddevice = "0.4.5"
+SoundFile = "0.11.0"
+numpy = "1.23.5"
+pydantic = "1.10.2"
+PyYAML = "6.0"
+typer = { extras = ["all"], version = "0.7.0" }
+uvloop = "0.17.0"
+inquirer = "3.1.1"
+soxr = "0.3.3"
+fastapi = "0.88.0"
+uvicorn = { extras = ["standard"], version = "0.20.0" }
+watchfiles = "0.18.1"
+sse-starlette = "1.2.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "7.2.0"
+pytest-cov = "4.0.0"
+pyright = "1.1.283"
+
+[build-system]
+requires = ["poetry-core>1.0.7"]          # 1.0.8 supports PEP 660 — editable installs
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+playbacker = "playbacker.main:cli"
+
+[tool.poetry-version-plugin]
+source = "git-tag"
+
+[tool.black]
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage.run]
+source = ["src/playbacker"]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+exclude_lines = ["pragma: no cover", "def __str__", "@abstractmethod"]

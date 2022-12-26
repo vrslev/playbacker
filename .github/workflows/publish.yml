@@ -6,37 +6,26 @@ on:
       - published
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
-
-      - name: Install Poetry
-        run: |
-          pip install -U pip
-          pip install -U poetry==v1.2.0a2
-          poetry plugin add poetry-version-plugin
-
-      - name: Cache
-        uses: actions/cache@v2
+          python-version: 3.11
+      - uses: actions/cache@v3
         with:
-          path: .venv
-          key: release-${{ hashFiles('pyproject.toml') }}
-
-      - name: Install dependencies
-        run: poetry install --without dev
-
-      - name: Build
-        run: poetry build
-
-      - name: Publish
-        uses: pypa/gh-action-pypi-publish@v1.5.0
+          path: /home/runner/.cache/pypoetry/virtualenvs
+          key: backend-${{ hashFiles('backend/poetry.lock') }}
+      - run: pip install -U poetry
+      - run: cd backend && poetry install
+      - uses: actions/setup-node@v3
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          node-version: 16
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: cd frontend && npm ci
+      - run: make build
+      - run: poetry publish -u __root__ -p $TOKEN
+        env:
+          TOKEN: ${{ secrets.PYPI_API_TOKEN }}
