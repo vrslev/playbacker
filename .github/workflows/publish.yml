@@ -19,7 +19,9 @@ jobs:
             ~/.cache/pip
             ~/.cache/pypoetry
           key: backend-${{ hashFiles('backend/poetry.lock') }}
-      - run: pip install -U poetry
+      - run: |
+          pip install -U poetry
+          poetry plugin add poetry-version-plugin
       - run: cd backend && poetry install
       - uses: actions/setup-node@v3
         with:
@@ -28,6 +30,6 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: cd frontend && npm ci
       - run: make build
-      - run: cd backend && poetry publish -u __root__ -p $TOKEN
+      - run: cd backend && poetry publish -u __token__ -p $TOKEN
         env:
           TOKEN: ${{ secrets.PYPI_API_TOKEN }}
