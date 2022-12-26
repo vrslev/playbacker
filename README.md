@@ -1,22 +1,21 @@
 # Playbacker
 
-<img src="img/tui.png">
+<img width="1552" alt="gui" src="https://user-images.githubusercontent.com/75225148/209542295-d50d18c9-8b5a-43a9-bde1-4d0b4d115ca0.png">
 
-TUI application for managing playback on live music performances (metronome, cues and backing tracks).
+Local web application for managing playback on live music performances (metronome, cues and backing tracks).
 
 ## Rational
 
-Usually people use Ableton Live, Logic Pro or any other DAW for performances. I had issues with this kind of setup: too big, clumsy and require a lot of time.
+Usually people use Ableton Live, Logic Pro or any other DAW for performances. I had issues with this kind of setup: too big, clumsy and does require a lot of time and manual work.
 There's [MultiTracks' Playback](https://www.multitracks.com/products/playback/), but you have to pay a subscription to get important functionality. Also, it doesn't seem that robust.
 
 ## Solution
 
 Make my own app! 😃
 
-- Works only on macOS (with minimal effort can be adapted for Linux or Windows)
+- Works only on macOS
 - Configurable channel map
-- Storage management based on simple yaml files
-- Fully customizable: can be used as library to make your own frontend, tracks or whatever
+- Storage based on simple YAML files
 
 ## Installation
 
@@ -32,5 +31,5 @@ pipx install playbacker
 
 ## Usage
 
-- Setup configuration and storage files (example is in /example directory)
+- Set up configuration, setlist and song storage files (see /example directory)
 - Run `playbacker <PRETTY DEVICE NAME FROM CONFIG>`, for example, `playbacker default`
