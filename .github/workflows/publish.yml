@@ -15,7 +15,9 @@ jobs:
           python-version: 3.11
       - uses: actions/cache@v3
         with:
-          path: /home/runner/.cache/pypoetry/virtualenvs
+          path: |
+            ~/.cache/pip
+            ~/.cache/pypoetry
           key: backend-${{ hashFiles('backend/poetry.lock') }}
       - run: pip install -U poetry
       - run: cd backend && poetry install
@@ -26,6 +28,6 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: cd frontend && npm ci
       - run: make build
-      - run: poetry publish -u __root__ -p $TOKEN
+      - run: cd backend && poetry publish -u __root__ -p $TOKEN
         env:
           TOKEN: ${{ secrets.PYPI_API_TOKEN }}
