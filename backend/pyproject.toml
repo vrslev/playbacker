@@ -27,7 +27,7 @@ sse-starlette = "1.2.1"
 [tool.poetry.dev-dependencies]
 pytest = "7.2.0"
 pytest-cov = "4.0.0"
-pyright = "1.1.283"
+pyright = "1.1.285"
 
 [build-system]
 requires = ["poetry-core>1.0.7"]          # 1.0.8 supports PEP 660 — editable installs
