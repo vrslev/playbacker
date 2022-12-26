@@ -1,0 +1,31 @@
+name: Publish
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - uses: actions/cache@v3
+        with:
+          path: /home/runner/.cache/pypoetry/virtualenvs
+          key: backend-${{ hashFiles('backend/poetry.lock') }}
+      - run: pip install -U poetry
+      - run: cd backend && poetry install
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: cd frontend && npm ci
+      - run: make build
+      - run: poetry publish -u __root__ -p $TOKEN
+        env:
+          TOKEN: ${{ secrets.PYPI_API_TOKEN }}
