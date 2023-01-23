@@ -27,7 +27,7 @@ sse-starlette = "1.2.1"
 [tool.poetry.dev-dependencies]
 pytest = "7.2.1"
 pytest-cov = "4.0.0"
-pyright = "1.1.289"
+pyright = "1.1.290"
 
 [build-system]
 requires = [
