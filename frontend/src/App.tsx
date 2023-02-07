@@ -50,14 +50,14 @@ function Shortcut(props: {
           props.action(event);
           setHighlight(true);
         },
-      ])
-    )
+      ]),
+    ),
   );
   addKeyboardShortcuts(
     "keyup",
     Object.fromEntries(
-      props.keys.map((key) => [key, () => setHighlight(false)])
-    )
+      props.keys.map((key) => [key, () => setHighlight(false)]),
+    ),
   );
 
   return (

@@ -10,7 +10,7 @@ import { makeUrl, Player, PlayerState, Song } from "./api";
 
 function getPreviousSong(
   songs: Song[],
-  current: Song | null
+  current: Song | null,
 ): Song | undefined {
   if (!current) return;
   const index = songs.indexOf(current);
@@ -25,7 +25,7 @@ function getNextSong(songs: Song[], current: Song | null): Song {
 
 export function getStore(player: Player) {
   const [setlists, { refetch: refetchSetlists }] = createResource(
-    player.getSetlists
+    player.getSetlists,
   );
 
   function allowSetlistChange(prev: string | null, next: string | null) {
@@ -36,12 +36,12 @@ export function getStore(player: Player) {
   const [setlistName, setSetlistName] = createStorageSignal<string | null>(
     "setlistName",
     null,
-    { equals: (prev, next) => !allowSetlistChange(prev, next) }
+    { equals: (prev, next) => !allowSetlistChange(prev, next) },
   );
 
   const [setlist, { refetch: refetchSetlist }] = createResource(
     setlistName,
-    player.getSetlist
+    player.getSetlist,
   );
   createEffect(
     on(setlist, (setlist) => {
@@ -50,7 +50,7 @@ export function getStore(player: Player) {
         const match = setlist.songs.find((value) => value.name == song_?.name);
         if (!match) setSong(setlist.songs[0]);
       }
-    })
+    }),
   );
 
   const [song, setSong] = createStorageSignal<Song | null>("song", null, {
@@ -74,7 +74,7 @@ export function getStore(player: Player) {
   createEffect(
     on(song, async () => updateState(await player.prepareForSwitch()), {
       defer: false,
-    })
+    }),
   );
 
   function updateState(state: PlayerState) {
@@ -104,7 +104,7 @@ export function getStore(player: Player) {
     const setlistName_ = setlistName();
     if (setlistSource) setlistSource.close();
     setlistSource = new EventSource(
-      makeUrl(`/watchSetlist?name=${setlistName_}`)
+      makeUrl(`/watchSetlist?name=${setlistName_}`),
     );
     setlistSource.addEventListener("message", () => refetchSetlist(), false);
   });
