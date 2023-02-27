@@ -9,7 +9,7 @@
     "lint": "tsc"
   },
   "dependencies": {
-    "@solid-primitives/storage": "1.3.4",
+    "@solid-primitives/storage": "1.3.5",
     "solid-js": "1.6.11",
     "tinykeys": "1.4.0"
   },
