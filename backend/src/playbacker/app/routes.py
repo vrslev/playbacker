@@ -27,8 +27,12 @@ router = APIRouter()
 _RouteFunc = TypeVar("_RouteFunc", bound=Callable[..., Any])
 
 
-def route(func: _RouteFunc) -> _RouteFunc:
+def post(func: _RouteFunc) -> _RouteFunc:
     return router.post(f"/{func.__name__}")(func)
+
+
+def get(func: _RouteFunc) -> _RouteFunc:
+    return router.get(f"/{func.__name__}")(func)
 
 
 class PlayerState(BaseModel):
@@ -40,7 +44,7 @@ class PlayerState(BaseModel):
         return cls(playing=player.playing, guide_enabled=player.guide_enabled)
 
 
-@route
+@post
 def get_setlists(setlists_dir: CurrentSetlistDir):
     stems = [prettify_setlist_stem(f.stem) for f in setlists_dir.glob("*.yaml")]
     stems.sort(reverse=True)
@@ -54,7 +58,7 @@ def get_setlist_path_from_pretty_name(name: str, setlists_dir_path: Path) -> Pat
     raise HTTPException(404, "no setlist with this name")
 
 
-@route
+@post
 def get_setlist(
     name: str, setlists_dir: CurrentSetlistDir, songs_file: CurrentSongsFile
 ) -> Setlist:
@@ -72,7 +76,7 @@ def get_setlist(
         raise HTTPException(404, err.message)
 
 
-@route
+@post
 def toggle_playing(tempo: Tempo, player: CurrentPlayer):
     if player.playing:
         player.pause()
@@ -81,25 +85,25 @@ def toggle_playing(tempo: Tempo, player: CurrentPlayer):
     return PlayerState.make(player)
 
 
-@route
+@post
 def toggle_guide_enabled(player: CurrentPlayer):
     player.guide_enabled = not player.guide_enabled
     return PlayerState.make(player)
 
 
-@route
+@post
 def prepare_for_switch(player: CurrentPlayer):
     player.prepare_for_switch()
     return PlayerState.make(player)
 
 
-@route
+@post
 def reset(player: CurrentPlayer):
     player.reset()
     return PlayerState.make(player)
 
 
-@route
+@get
 def watch_setlists(setlist_dir: CurrentSetlistDir):
     async def watch():
         async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
@@ -110,7 +114,7 @@ def watch_setlists(setlist_dir: CurrentSetlistDir):
     return EventSourceResponse(watch())
 
 
-@route
+@get
 def watch_setlist(
     name: str, setlist_dir: CurrentSetlistDir, songs_file: CurrentSongsFile
 ) -> EventSourceResponse:

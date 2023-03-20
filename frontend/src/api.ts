@@ -21,11 +21,11 @@ export interface PlayerState {
 }
 
 export interface Player {
-  getSetlists(): Promise<string[]>;
-  getSetlist(name: string): Promise<Setlist>;
-  togglePlaying(tempo: Tempo): Promise<PlayerState>;
-  toggleGuideEnabled(): Promise<PlayerState>;
-  prepareForSwitch(): Promise<PlayerState>;
+  get_setlists(): Promise<string[]>;
+  get_setlist(name: string): Promise<Setlist>;
+  toggle_playing(tempo: Tempo): Promise<PlayerState>;
+  toggle_guide_enabled(): Promise<PlayerState>;
+  prepare_for_switch(): Promise<PlayerState>;
   reset(): Promise<PlayerState>;
 }
 
@@ -36,16 +36,16 @@ export function apiPlayer(): Player {
     (await fetch(makeUrl(path), { method: "POST", ...init })).json();
 
   return {
-    getSetlists: () => e("/getSetlists"),
-    getSetlist: (name: string) =>
-      e(`/getSetlist?${new URLSearchParams({ name })}`),
-    togglePlaying: (tempo: Tempo) =>
-      e("/togglePlaying", {
+    get_setlists: () => e("/get_setlists"),
+    get_setlist: (name: string) =>
+      e(`/get_setlist?${new URLSearchParams({ name })}`),
+    toggle_playing: (tempo: Tempo) =>
+      e("/toggle_playing", {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tempo),
       }),
-    toggleGuideEnabled: () => e("/toggleGuideEnabled"),
-    prepareForSwitch: () => e("/prepareForSwitch"),
+    toggle_guide_enabled: () => e("/toggle_guide_enabled"),
+    prepare_for_switch: () => e("/prepare_for_switch"),
     reset: () => e("/reset"),
   };
 }
