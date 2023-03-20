@@ -5,8 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-
-from playbacker.app.routes import get_router
+from playbacker.app.dependencies import set_dependencies
+from playbacker.app.routes import router
 from playbacker.config import Config, get_config_file_path
 from playbacker.core.playback import Playback
 from playbacker.core.player import Player
@@ -30,7 +30,8 @@ def get_app(config: Config):
         ],
         on_shutdown=[lambda: player.stop()],
     )
-    app.include_router(get_router(config, player))
+    set_dependencies(app=app, player=player, config=config)
+    app.include_router(router)
 
     frontend = Path(__file__).parent.parent / "dist"
     if frontend.exists():
