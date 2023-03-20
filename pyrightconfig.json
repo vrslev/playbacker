@@ -1,6 +1,7 @@
 {
   "venvPath": "backend",
   "venv": ".venv",
+  "extraPaths": ["backend"],
   "typeCheckingMode": "strict",
   "reportMissingTypeStubs": false,
   "reportImportCycles": false,
