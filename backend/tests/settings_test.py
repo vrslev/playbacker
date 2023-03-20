@@ -54,7 +54,9 @@ def test_get_device_props(monkeypatch: pytest.MonkeyPatch, device: _Device):
 
 @pytest.fixture
 def devices():
-    m = lambda: _ChannelMap(metronome=[1], guide=[2], multitrack=[3, 4])
+    def m():
+        return _ChannelMap(metronome=[1], guide=[2], multitrack=[3, 4])
+
     return [
         _Device(
             name="dev1", pretty_name="Device 1", sample_rate=48000, channel_map=m()

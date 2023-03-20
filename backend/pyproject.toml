@@ -46,8 +46,8 @@ format = "v{base}"
 [tool.black]
 target-version = ["py310"]
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+ignore = ["E501"]
 
 [tool.coverage.run]
 source = ["src/playbacker"]

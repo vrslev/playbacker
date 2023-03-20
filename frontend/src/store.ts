@@ -25,7 +25,7 @@ function getNextSong(songs: Song[], current: Song | null): Song {
 
 export function getStore(player: Player) {
   const [setlists, { refetch: refetchSetlists }] = createResource(
-    player.getSetlists,
+    player.get_setlists,
   );
 
   function allowSetlistChange(prev: string | null, next: string | null) {
@@ -41,7 +41,7 @@ export function getStore(player: Player) {
 
   const [setlist, { refetch: refetchSetlist }] = createResource(
     setlistName,
-    player.getSetlist,
+    player.get_setlist,
   );
   createEffect(
     on(setlist, (setlist) => {
@@ -72,7 +72,7 @@ export function getStore(player: Player) {
     },
   });
   createEffect(
-    on(song, async () => updateState(await player.prepareForSwitch()), {
+    on(song, async () => updateState(await player.prepare_for_switch()), {
       defer: false,
     }),
   );
@@ -88,15 +88,15 @@ export function getStore(player: Player) {
   async function togglePlaying() {
     const song_ = song();
     if (!song_) return;
-    updateState(await player.togglePlaying(song_.tempo));
+    updateState(await player.toggle_playing(song_.tempo));
   }
 
   const [guideEnabled, _setGuideEnabled] = createSignal(true);
   const toggleGuide = async () =>
-    updateState(await player.toggleGuideEnabled());
+    updateState(await player.toggle_guide_enabled());
   const resetPlayback = async () => updateState(await player.reset());
 
-  const setlistsSource = new EventSource(makeUrl("/watchSetlists"));
+  const setlistsSource = new EventSource(makeUrl("/watch_setlists"));
   setlistsSource.addEventListener("message", () => refetchSetlists(), false);
 
   let setlistSource: EventSource | undefined;
@@ -104,7 +104,7 @@ export function getStore(player: Player) {
     const setlistName_ = setlistName();
     if (setlistSource) setlistSource.close();
     setlistSource = new EventSource(
-      makeUrl(`/watchSetlist?name=${setlistName_}`),
+      makeUrl(`/watch_setlist?name=${setlistName_}`),
     );
     setlistSource.addEventListener("message", () => refetchSetlist(), false);
   });
