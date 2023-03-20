@@ -3,9 +3,6 @@ from pathlib import Path
 import watchfiles
 import yaml
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from sse_starlette import EventSourceResponse
-
 from playbacker.config import Config, get_setlists_dir_path, get_songs_file_path
 from playbacker.core.player import Player
 from playbacker.core.setlist import (
@@ -16,6 +13,8 @@ from playbacker.core.setlist import (
 )
 from playbacker.core.song import load_songs
 from playbacker.core.tempo import Tempo
+from pydantic import BaseModel
+from sse_starlette import EventSourceResponse
 
 
 def get_setlist_path_from_pretty_name(name: str, setlists_dir_path: Path) -> Path:

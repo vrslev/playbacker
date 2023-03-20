@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 from unittest.mock import Mock
@@ -18,13 +17,17 @@ def audiofile():
 def test_audiofile_data_no_resample(
     audiofile: AudioFile, monkeypatch: pytest.MonkeyPatch
 ):
-    func: Callable[..., Any] = lambda _: ("mydata", 44100)
+    def func(_: Any):
+        return ("mydata", 44100)
+
     monkeypatch.setattr(soundfile, "read", func)
     assert audiofile.data == "mydata"
 
 
 def test_audiofile_data_resample(audiofile: AudioFile, monkeypatch: pytest.MonkeyPatch):
-    func: Callable[..., Any] = lambda _: ("mydata", 48000)
+    def func(_: Any):
+        return "mydata", 48000
+
     monkeypatch.setattr(soundfile, "read", func)
 
     mock = Mock()

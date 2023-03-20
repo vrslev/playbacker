@@ -56,3 +56,6 @@ source = ["src/playbacker"]
 skip_covered = true
 show_missing = true
 exclude_lines = ["pragma: no cover", "def __str__", "@abstractmethod"]
+
+[tool.ruff]
+ignore = ["E501"]
