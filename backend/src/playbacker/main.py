@@ -1,7 +1,8 @@
 from pathlib import Path
 
+import granian
 import typer
-import uvicorn
+from granian.constants import Interfaces
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
@@ -32,6 +33,17 @@ def default_app():
     return get_app(default_config)
 
 
+def app_loader(target: str):
+    return get_app(Config.parse_raw(target))
+
+
+def run_server(config: Config, reload: bool):
+    server = granian.server.Granian(
+        config.json(), interface=Interfaces.ASGI, reload=reload
+    )
+    server.serve(target_loader=app_loader)
+
+
 cli = typer.Typer(add_completion=False)
 
 
@@ -52,15 +64,12 @@ def main(
             print(
                 f"Setting config to {default_config_dir_path} since you passed --reload."
             )
-        uvicorn.run(  # pyright: ignore[reportUnknownMemberType]
-            "playbacker.main:default_app",
-            factory=True,
-            reload=True,
+        config_obj = Config(
+            config_dir_path=default_config_dir_path, device=default_device
         )
-
     else:
-        app = get_app(Config(config_dir_path=config, device=device))
-        uvicorn.run(app)  # pyright: ignore[reportUnknownMemberType]
+        config_obj = Config(config_dir_path=config, device=device)
+    run_server(config=config_obj, reload=reload)
 
 
 @cli.command()
