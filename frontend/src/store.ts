@@ -96,17 +96,21 @@ export function getStore(player: Player) {
     updateState(await player.toggle_guide_enabled());
   const resetPlayback = async () => updateState(await player.reset());
 
-  const setlistsSource = new EventSource(makeUrl("/watch_setlists"));
-  setlistsSource.addEventListener("message", () => refetchSetlists(), false);
-
-  let setlistSource: EventSource | undefined;
+  let watchSource: EventSource | undefined;
   createEffect(() => {
     const setlistName_ = setlistName();
-    if (setlistSource) setlistSource.close();
-    setlistSource = new EventSource(
-      makeUrl(`/watch_setlist?name=${setlistName_}`),
+    if (watchSource) watchSource.close();
+    watchSource = new EventSource(
+      makeUrl(`/watch?current_setlist=${setlistName_}`),
     );
-    setlistSource.addEventListener("message", () => refetchSetlist(), false);
+    watchSource.addEventListener(
+      "message",
+      (event) => {
+        if (event.data == "current_setlist") refetchSetlist();
+        else if (event.data == "setlists") refetchSetlists();
+      },
+      false,
+    );
   });
 
   function previousSong() {

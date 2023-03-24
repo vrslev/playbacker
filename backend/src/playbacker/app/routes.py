@@ -1,10 +1,15 @@
+import asyncio
+from collections.abc import Callable
+from contextlib import suppress
 from pathlib import Path
 from typing import Any, TypeVar
-from collections.abc import Callable
 
 import watchfiles
 import yaml
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from sse_starlette import EventSourceResponse
+
 from playbacker.app.dependencies import (
     CurrentPlayer,
     CurrentSetlistDir,
@@ -19,8 +24,6 @@ from playbacker.core.setlist import (
 )
 from playbacker.core.song import load_songs
 from playbacker.core.tempo import Tempo
-from pydantic import BaseModel
-from sse_starlette import EventSourceResponse
 
 router = APIRouter()
 
@@ -104,26 +107,22 @@ def reset(player: CurrentPlayer):
 
 
 @get
-def watch_setlists(setlist_dir: CurrentSetlistDir):
-    async def watch():
-        async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
-            setlist_dir
-        ):
-            yield True
-
-    return EventSourceResponse(watch())
-
-
-@get
-def watch_setlist(
-    name: str, setlist_dir: CurrentSetlistDir, songs_file: CurrentSongsFile
+def watch(
+    current_setlist: str, setlist_dir: CurrentSetlistDir, songs_file: CurrentSongsFile
 ) -> EventSourceResponse:
-    path = get_setlist_path_from_pretty_name(name, setlist_dir)
+    setlist_path = get_setlist_path_from_pretty_name(current_setlist, setlist_dir)
 
-    async def watch():
-        async for _ in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
-            path, songs_file
-        ):
-            yield True
+    async def publisher():
+        with suppress(asyncio.CancelledError):
+            async for changes in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
+                songs_file, setlist_dir, rust_timeout=1
+            ):
+                for _, path in changes:
+                    path = Path(path)
+                    yield path, setlist_path, setlist_path == path
+                    if path == setlist_path or path == songs_file:
+                        yield "current_setlist"
+                    else:
+                        yield "setlists"
 
-    return EventSourceResponse(watch())
+    return EventSourceResponse(publisher())
