@@ -119,7 +119,6 @@ def watch(
             ):
                 for _, path in changes:
                     path = Path(path)
-                    yield path, setlist_path, setlist_path == path
                     if path == setlist_path or path == songs_file:
                         yield "current_setlist"
                     else:
