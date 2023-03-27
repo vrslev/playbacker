@@ -27,7 +27,7 @@ granian = "0.3.1"
 [tool.poetry.dev-dependencies]
 pytest = "7.2.1"
 pytest-cov = "4.0.0"
-pyright = "1.1.299"
+pyright = "1.1.300"
 
 [build-system]
 requires = [
