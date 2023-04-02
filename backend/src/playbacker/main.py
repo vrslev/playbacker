@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 
 import granian
@@ -6,7 +7,7 @@ from granian.constants import Interfaces
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
-from playbacker.app.app import get_app
+from playbacker.app.app import get_app, get_frontend
 from playbacker.config import (
     Config,
     get_config_file_path,
@@ -69,6 +70,10 @@ def main(
         )
     else:
         config_obj = Config(config_dir_path=config, device=device)
+
+    if get_frontend().exists():
+        subprocess.check_call(("open", "http://127.0.0.1:8000"))
+
     run_server(config=config_obj, reload=reload)
 
 
