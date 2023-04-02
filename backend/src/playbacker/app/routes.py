@@ -1,14 +1,11 @@
-import asyncio
 from collections.abc import Callable
-from contextlib import suppress
 from pathlib import Path
 from typing import Any, TypeVar
 
 import watchfiles
 import yaml
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, WebSocket
 from pydantic import BaseModel
-from sse_starlette import EventSourceResponse
 
 from playbacker.app.dependencies import (
     CurrentPlayer,
@@ -106,22 +103,22 @@ def reset(player: CurrentPlayer):
     return PlayerState.make(player)
 
 
-@get
-def watch(
-    current_setlist: str, setlist_dir: CurrentSetlistDir, songs_file: CurrentSongsFile
-) -> EventSourceResponse:
+@router.websocket("watch")
+async def watch(
+    websocket: WebSocket,
+    current_setlist: str,
+    setlist_dir: CurrentSetlistDir,
+    songs_file: CurrentSongsFile,
+):
+    await websocket.accept()
     setlist_path = get_setlist_path_from_pretty_name(current_setlist, setlist_dir)
 
-    async def publisher():
-        with suppress(asyncio.CancelledError):
-            async for changes in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
-                songs_file, setlist_dir, rust_timeout=1
-            ):
-                for _, path in changes:
-                    path = Path(path)
-                    if path == setlist_path or path == songs_file:
-                        yield "current_setlist"
-                    else:
-                        yield "setlists"
-
-    return EventSourceResponse(publisher())
+    async for changes in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
+        songs_file, setlist_dir
+    ):
+        for _, path in changes:
+            path = Path(path)
+            if path == setlist_path or path == songs_file:
+                await websocket.send_text("current_setlist")
+            else:
+                await websocket.send_text("setlists")

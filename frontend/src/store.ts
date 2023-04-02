@@ -6,7 +6,7 @@ import {
   createSignal,
   on,
 } from "solid-js";
-import { makeUrl, Player, PlayerState, Song } from "./api";
+import { Player, PlayerState, Song, makeUrl } from "./api";
 
 function getPreviousSong(
   songs: Song[],
@@ -96,14 +96,14 @@ export function getStore(player: Player) {
     updateState(await player.toggle_guide_enabled());
   const resetPlayback = async () => updateState(await player.reset());
 
-  let watchSource: EventSource | undefined;
+  let websocket: WebSocket | undefined;
   createEffect(() => {
     const setlistName_ = setlistName();
-    if (watchSource) watchSource.close();
-    watchSource = new EventSource(
+    if (websocket) websocket.close();
+    websocket = new WebSocket(
       makeUrl(`/watch?current_setlist=${setlistName_}`),
     );
-    watchSource.addEventListener(
+    websocket.addEventListener(
       "message",
       (event) => {
         if (event.data == "current_setlist") refetchSetlist();
