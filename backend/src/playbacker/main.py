@@ -1,4 +1,3 @@
-import subprocess
 from pathlib import Path
 
 import typer
@@ -6,7 +5,7 @@ import uvicorn
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
-from playbacker.app.app import get_app, get_frontend
+from playbacker.app import get_app
 from playbacker.config import (
     Config,
     get_config_file_path,
@@ -45,9 +44,6 @@ def main(
 ):
     if ctx.invoked_subcommand is not None:
         return
-
-    if get_frontend().exists():
-        subprocess.check_call(("open", "http://127.0.0.1:8000"))
 
     if reload:
         if device != default_device:
