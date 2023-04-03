@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any, TypeVar
@@ -103,7 +104,7 @@ def reset(player: CurrentPlayer):
     return PlayerState.make(player)
 
 
-@router.websocket("watch")
+@router.websocket("/watch")
 async def watch(
     websocket: WebSocket,
     current_setlist: str,
@@ -113,12 +114,19 @@ async def watch(
     await websocket.accept()
     setlist_path = get_setlist_path_from_pretty_name(current_setlist, setlist_dir)
 
-    async for changes in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
-        songs_file, setlist_dir
-    ):
-        for _, path in changes:
-            path = Path(path)
-            if path == setlist_path or path == songs_file:
-                await websocket.send_text("current_setlist")
-            else:
-                await websocket.send_text("setlists")
+    async def run():
+        async for changes in watchfiles.awatch(  # pyright: ignore[reportUnknownMemberType]
+            songs_file, setlist_dir
+        ):
+            for _, path in changes:
+                path = Path(path)
+                if path == setlist_path or path == songs_file:
+                    await websocket.send_text("current_setlist")
+                else:
+                    await websocket.send_text("setlists")
+
+    task = asyncio.create_task(run())
+    try:
+        await websocket.receive()
+    finally:
+        task.cancel()

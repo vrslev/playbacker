@@ -6,7 +6,7 @@ import {
   createSignal,
   on,
 } from "solid-js";
-import { Player, PlayerState, Song, makeUrl } from "./api";
+import { Player, PlayerState, Song } from "./api";
 
 function getPreviousSong(
   songs: Song[],
@@ -99,9 +99,9 @@ export function getStore(player: Player) {
   let websocket: WebSocket | undefined;
   createEffect(() => {
     const setlistName_ = setlistName();
-    if (websocket) websocket.close();
+    websocket?.close();
     websocket = new WebSocket(
-      makeUrl(`/watch?current_setlist=${setlistName_}`),
+      `ws://127.0.0.1:8000/watch?current_setlist=${setlistName_}`,
     );
     websocket.addEventListener(
       "message",
@@ -112,6 +112,22 @@ export function getStore(player: Player) {
       false,
     );
   });
+  // let websocket: WebSocket | undefined;
+  // createEffect(() => {
+  //   const setlistName_ = setlistName();
+  //   websocket = new WebSocket(
+  //     `ws://127.0.0.1:8000/watch?current_setlist=${setlistName_}`
+  //   );
+  //   websocket.send(JSON.stringify(setlistName_))
+  //   websocket.addEventListener(
+  //     "message",
+  //     (event) => {
+  //       if (event.data == "current_setlist") refetchSetlist();
+  //       else if (event.data == "setlists") refetchSetlists();
+  //     },
+  //     false
+  //   );
+  // });
 
   function previousSong() {
     const songs = setlist()?.songs;
