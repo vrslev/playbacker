@@ -72,20 +72,20 @@ def validate(config: Path = config_opt):
     with Progress(
         SpinnerColumn(), TextColumn("[progress.description]{task.description}")
     ) as progress:
-        progress.add_task(description="Formatting...")
-        format_yaml_files(config_file, songs_file, f"{setlists_dir}/*.yaml")
-
-        progress.add_task(description="Validating config schema...")
-        validate_config_schema(config_file)
-
         progress.add_task(description="Checking unknown songs...")
         unknown_songs = get_unknown_songs(
             songs_file=songs_file, setlists_dir=setlists_dir
         )
         if unknown_songs:
-            progress.stop()
             table = Table(show_header=False, show_lines=True)
             for setlist_path, songs in unknown_songs.items():
                 songs_str = ",\n".join(f'"{song}"' for song in songs)
                 table.add_row(str(setlist_path), songs_str)
+            progress.stop()
             progress.print("There are unknown songs in setlists:", table)
+
+        progress.add_task(description="Validating config schema...")
+        validate_config_schema(config_file)
+
+        progress.add_task(description="Formatting...")
+        format_yaml_files(config_file, songs_file, f"{setlists_dir}/*.yaml")
