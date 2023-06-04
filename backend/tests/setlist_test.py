@@ -24,7 +24,7 @@ def setlist():
 
 def test_find_song_in_storage():
     songs = [gen_song() for _ in range(5)]
-    assert _find_song_in_storage(name=songs[2].name, storage=songs) == songs[2]
+    assert _find_song_in_storage(name=songs[2].name.upper(), storage=songs) == songs[2]
 
     with pytest.raises(NoSongInStorageError):
         _find_song_in_storage(name="asong", storage=songs)
