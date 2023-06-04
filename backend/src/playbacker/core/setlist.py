@@ -20,7 +20,7 @@ class NoSongInStorageError(Exception):
 
 def _find_song_in_storage(name: str, storage: list[Song]):
     for song in storage:
-        if song.name == name:
+        if song.name.casefold() == name.casefold():
             return song
 
     raise NoSongInStorageError(f'Song "{name}" is not present in storage')
