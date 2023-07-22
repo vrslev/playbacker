@@ -61,4 +61,12 @@ countdown_schemes: dict[TimeSignature, list[_Entry]] = {
         _Entry(end=20, instruction=3),
         _Entry(end=23, instruction=4),
     ],
+    "12/4": [
+        _Entry(end=5, instruction=1),
+        _Entry(end=11, instruction=2),
+        _Entry(end=14, instruction=1),
+        _Entry(end=17, instruction=2),
+        _Entry(end=20, instruction=3),
+        _Entry(end=23, instruction=4),
+    ],
 }

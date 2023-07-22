@@ -36,6 +36,7 @@ class _Device(BaseModel):
 
 
 class _MetronomePaths(BaseModel):
+    accent: Path
     tick_1_4: Path = Field(alias="1/4")
     tick_1_8: Path = Field(alias="1/8")
     tick_1_16: Path = Field(alias="1/16")
@@ -104,6 +105,7 @@ def _convert_file_settings(settings: _FileSettings, device_name: str) -> Setting
         channel_map=device.channel_map,
         sounds=_Sounds(
             metronome=MetronomeSounds(
+                accent=AudioFile(metronome.accent, device.sample_rate),
                 tick_1_4=AudioFile(metronome.tick_1_4, device.sample_rate),
                 tick_1_8=AudioFile(metronome.tick_1_8, device.sample_rate),
                 tick_1_16=AudioFile(metronome.tick_1_16, device.sample_rate),

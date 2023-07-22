@@ -2,7 +2,6 @@ from pathlib import Path
 
 import pytest
 import sounddevice
-
 from playbacker.core.settings import (
     Settings,
     _ChannelMap,
@@ -90,7 +89,10 @@ def file_settings(devices: list[_Device], tmp_path: pytest.TempPathFactory):
         devices=devices,
         sounds=_SoundPaths(
             metronome=_MetronomePaths.construct(
-                tick_1_4=Path("1/4"), tick_1_8=Path("1/8"), tick_1_16=Path("1/16")
+                accent=Path("accent"),
+                tick_1_4=Path("1/4"),
+                tick_1_8=Path("1/8"),
+                tick_1_16=Path("1/16"),
             ),
             countdown=_CountdownPaths.construct(
                 count_1=Path("count_1"),
@@ -123,6 +125,7 @@ def test_convert_file_settings(file_settings: _FileSettings):
     assert settings.channel_map == device.channel_map
     assert settings.channel_limit == 16
 
+    assert sounds.metronome.accent.path == file_settings.sounds.metronome.accent
     assert sounds.metronome.tick_1_4.path == file_settings.sounds.metronome.tick_1_4
     assert sounds.metronome.tick_1_8.path == file_settings.sounds.metronome.tick_1_8
     assert sounds.metronome.tick_1_16.path == file_settings.sounds.metronome.tick_1_16

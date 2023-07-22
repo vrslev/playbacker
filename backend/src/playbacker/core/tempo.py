@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-TimeSignature = Literal["4/4", "6/8"]
+TimeSignature = Literal["4/4", "6/8", "12/4"]
 Duration = Literal["1/4", "1/8", "1/16"]
 
 
