@@ -20,6 +20,7 @@ def metronome_track(stream_builder: StreamBuilder):
         shared=Shared(),
         stream_builder=stream_builder,
         sounds=MetronomeSounds(
+            accent=AudioFile(path=Path("accent"), sample_rate=44100),
             tick_1_4=AudioFile(path=Path("tick_1_4"), sample_rate=44100),
             tick_1_8=AudioFile(path=Path("tick_1_8"), sample_rate=44100),
             tick_1_16=AudioFile(path=Path("tick_1_16"), sample_rate=44100),
@@ -43,7 +44,10 @@ def test_get_sound(metronome_track: MetronomeTrack, position: int):
         return mock
 
     metronome_track.sounds = MetronomeSounds(
-        tick_1_4=audiofile_mock(), tick_1_8=audiofile_mock(), tick_1_16=audiofile_mock()
+        accent=audiofile_mock(),
+        tick_1_4=audiofile_mock(),
+        tick_1_8=audiofile_mock(),
+        tick_1_16=audiofile_mock(),
     )
     metronome_track.__post_init__()
 
