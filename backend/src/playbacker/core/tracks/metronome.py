@@ -46,7 +46,7 @@ metronome_schemes: dict[TimeSignature, dict[Duration, list[_Entry]]] = {
     "4/4": {
         "1/4": [_Entry(divider=4, instruction=4)],
         "1/8": [
-            _Entry(divider=16, instruction="accent"),
+            # _Entry(divider=16, instruction="accent"),
             _Entry(divider=4, instruction=4),
             _Entry(divider=2, instruction=8),
         ],
